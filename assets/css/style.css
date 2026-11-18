@@ -212,7 +212,7 @@ input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1p
 .row details ul { margin: 4px 0 0; padding-left: 18px; }
 
 .alert { border-radius: var(--radius-sm); padding: 14px 16px; margin-top: 14px; font-size: 14px; border: 1px solid; }
-.alert b { display: block; margin-bottom: 4px; }
+.alert > b { display: block; margin-bottom: 4px; }
 .alert.warn { background: rgba(255, 204, 77, .07); border-color: rgba(255, 204, 77, .35); color: #ffe2a0; }
 .alert.danger { background: rgba(255, 107, 91, .08); border-color: rgba(255, 107, 91, .4); color: #ffc4bc; }
 .alert.info { background: var(--bg-2); border-color: var(--line); color: var(--muted); }
@@ -224,6 +224,34 @@ input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1p
 
 .page-head { padding: 44px 0 16px; }
 .page-head p { color: var(--muted); max-width: 66ch; font-size: 17px; }
+
+/* ---------- Болячки ---------- */
+.chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.chips button {
+  background: var(--card); color: var(--muted); border: 1px solid var(--line); border-radius: 999px;
+  padding: 10px 16px; font: 700 14px var(--font-body); cursor: pointer;
+}
+.chips button:hover { color: var(--text); border-color: var(--dim); }
+.chips button[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.issues-stats { margin-top: 0; }
+.comp-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.comp-row { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; margin-bottom: 5px; }
+.comp-row b { white-space: nowrap; }
+.comp-bar { height: 8px; background: var(--bg-2); border-radius: 999px; overflow: hidden; }
+.comp-bar span { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+.year-bars { display: flex; align-items: flex-end; gap: 12px; height: 200px; padding-top: 10px; }
+.year-bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 6px; height: 100%; }
+.year-bar .b { width: 100%; max-width: 56px; background: var(--c-car); border-radius: 8px 8px 3px 3px; }
+.year-bar .v { font-size: 13px; font-weight: 700; }
+.year-bar .y { font-size: 13px; color: var(--dim); }
+.recalls { list-style: none; margin: 0; padding: 0; display: grid; }
+.recall { padding: 14px 0; border-bottom: 1px solid var(--line); }
+.recall:last-child { border-bottom: 0; }
+.recall-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 4px; }
+.recall p { margin: 0 0 6px; font-size: 14px; color: var(--muted); }
+.recall-meta { font-size: 12px; color: var(--dim); }
+.badge.danger { background: rgba(255, 107, 91, .14); color: var(--danger); }
+.more summary { cursor: pointer; color: var(--accent-2); font-weight: 700; padding: 10px 0; }
 
 /* ---------- Плашка cookie ---------- */
 .cookie-bar {
@@ -244,8 +272,9 @@ input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1p
 }
 @media (max-width: 680px) {
   .site-header .wrap { gap: 12px; }
-  .logo { font-size: 15px; }
-  .nav a { padding: 7px 10px; font-size: 13px; }
+  .logo { font-size: 14px; }
+  .nav { gap: 2px; }
+  .nav a { padding: 6px 8px; font-size: 12.5px; }
   .nav a[href="index.html"] { display: none; }
   .hero { padding: 44px 0 32px; }
   .stats { grid-template-columns: 1fr; }

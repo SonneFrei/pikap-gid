@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Болячки американских пикапов — по данным NHTSA</title>
+  <meta name="description" content="Жалобы владельцев и отзывные кампании RAM 1500, TRX, Ford F-150, Raptor, Chevrolet Silverado и GMC Sierra по данным американского регулятора NHTSA — на русском, со ссылками на оригинал.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="logo" href="index.html">Пикап<span>·</span>Гид</a>
+      <nav class="nav" aria-label="Разделы">
+        <a href="index.html">Главная</a>
+        <a href="models.html">Модели</a>
+        <a href="issues.html" class="active">Болячки</a>
+        <a href="calculator.html">Калькулятор</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="page-head">
+      <h1>Болячки по данным США</h1>
+      <p>Что ломается у американских пикапов — не по слухам, а по официальной базе американского регулятора <b>NHTSA</b>: жалобы владельцев и отзывные кампании производителей. Переведено на русский, у каждой кампании — ссылка на оригинал.</p>
+    </div>
+
+    <div class="alert info" style="margin:0 0 20px">
+      <b>Как читать эти цифры</b>
+      <ul>
+        <li><b>Жалоба</b> — то, что владелец сам отправил регулятору. Её никто не проверяет, но тысячи жалоб на один узел — это сигнал.</li>
+        <li><b>Не сравнивайте модели по общему числу жалоб.</b> F-150 и Silverado продаются в разы больше, чем RAM и тем более TRX, — жалоб у них больше просто из-за количества машин. Смотрите на <b>структуру</b>: что именно ломается.</li>
+        <li><b>Отзывная кампания</b> — официально признанный производителем дефект. Его бесплатно устраняют у дилера в США; в России — проверяйте по VIN, была ли машина на отзыве.</li>
+      </ul>
+    </div>
+
+    <div class="chips" id="issues-tabs" role="tablist" aria-label="Модель"></div>
+    <div id="issues-root" aria-live="polite"></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© 2026 Пикап·Гид (рабочее название)</span>
+      <span>Источник: NHTSA, api.nhtsa.gov. Расчёты — ориентир, а не оферта.</span>
+    </div>
+  </footer>
+
+  <script src="assets/js/analytics.js"></script>
+  <script src="assets/js/rules.js"></script>
+  <script src="assets/js/models.js"></script>
+  <script src="assets/js/issues-ru.js"></script>
+  <script src="assets/data/nhtsa.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

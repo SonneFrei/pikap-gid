@@ -55,6 +55,135 @@
   }
 
   /* =========================================================
+   * Болячки (данные NHTSA)
+   * ========================================================= */
+  const issuesRoot = document.getElementById("issues-root");
+  if (issuesRoot && window.NHTSA) {
+    const GROUPS = [
+      { id: "ram-1500", label: "RAM 1500", model: "ram-1500" },
+      { id: "ram-trx", label: "RAM TRX", model: "ram-trx" },
+      { id: "ford-f150", label: "Ford F-150", model: "ford-f150" },
+      { id: "ford-raptor", label: "F-150 Raptor", model: "ford-raptor" },
+      { id: "chevy-silverado", label: "Silverado 1500", model: "chevy-silverado" },
+      { id: "gmc-sierra", label: "Sierra 1500", model: "gmc-sierra" }
+    ];
+    const NOTES = {
+      "ram-1500": "В базе жалоб NHTSA все версии RAM 1500 — включая старый RAM 1500 Classic, TRX и RHO — записаны одной моделью «1500». Отделить их нельзя, поэтому цифры общие.",
+      "ram-trx": "NHTSA не выделяет TRX отдельно. Здесь — только те жалобы на RAM 1500, где владелец прямо упомянул TRX. Выборка маленькая: смотрите её вместе с общими данными RAM 1500 — платформа и большая часть узлов общие.",
+      "ford-raptor": "NHTSA не выделяет Raptor отдельно. Здесь — только жалобы на F-150, где упомянут Raptor. Отзывные кампании F-150 по общим узлам касаются и Raptor — смотрите вкладку F-150.",
+      "chevy-silverado": "Silverado и GMC Sierra — одна платформа с общими моторами и коробками. Отзывные кампании у них почти всегда совпадают.",
+      "gmc-sierra": "Sierra и Chevrolet Silverado — одна платформа с общими моторами и коробками. Отзывные кампании у них почти всегда совпадают."
+    };
+    const tabs = document.getElementById("issues-tabs");
+    tabs.innerHTML = GROUPS.map((g) =>
+      `<button type="button" role="tab" data-id="${g.id}">${esc(g.label)}</button>`).join("");
+
+    const tr = (id) => (window.ISSUES_RU.recalls || {})[id];
+    const yearsLabel = (ys) => {
+      const s = [...ys].sort();
+      return s.length === 1 ? String(s[0]) : `${s[0]}–${s[s.length - 1]}`;
+    };
+    const recallUrl = (id) => `https://www.nhtsa.gov/recalls?nhtsaId=${encodeURIComponent(id)}`;
+
+    function recallItem(r) {
+      const t = tr(r.id);
+      const badges = [];
+      if (r.parkIt) badges.push('<span class="badge danger">не ездить до ремонта</span>');
+      if (r.parkOutSide) badges.push('<span class="badge danger">парковать на улице — риск возгорания</span>');
+      return `
+        <li class="recall">
+          <div class="recall-head">
+            <b>${esc(t ? t.title : window.ruComponent(r.component))}</b>
+            ${badges.join(" ")}
+          </div>
+          ${t ? `<p>${esc(t.text)}</p>` : `<p class="dim">Узел: ${esc(window.ruComponent(r.component))}. Перевод готовится — подробности в оригинале.</p>`}
+          <div class="recall-meta">
+            Модельные годы: ${esc(yearsLabel(r.years))} · кампания ${esc(r.id)}${r.date ? " · " + esc(r.date) : ""}
+            · <a href="${recallUrl(r.id)}" target="_blank" rel="noopener">оригинал на NHTSA</a>
+          </div>
+        </li>`;
+    }
+
+    function render(id) {
+      const g = GROUPS.find((x) => x.id === id) || GROUPS[0];
+      const m = window.NHTSA.models[g.id];
+      [...tabs.children].forEach((b) => b.setAttribute("aria-selected", String(b.dataset.id === g.id)));
+      if (!m) { issuesRoot.innerHTML = '<p class="muted">Данных пока нет.</p>'; return; }
+
+      const c = m.complaints;
+      const maxComp = c.byComponent.length ? c.byComponent[0][1] : 1;
+      const years = Object.entries(c.byYear);
+      const maxYear = Math.max(1, ...years.map(([, v]) => v));
+
+      const recalls = [...m.recalls].sort((a, b) =>
+        (tr(b.id) ? 1 : 0) - (tr(a.id) ? 1 : 0) ||
+        ((b.parkIt || b.parkOutSide) ? 1 : 0) - ((a.parkIt || a.parkOutSide) ? 1 : 0) ||
+        String(b.id).localeCompare(String(a.id)));
+      const firstN = 8;
+
+      issuesRoot.innerHTML = `
+        ${NOTES[g.id] ? `<div class="alert warn" style="margin-top:0"><b>Важно про эти данные</b>${esc(NOTES[g.id])}</div>` : ""}
+        <div class="stats issues-stats">
+          <div class="stat"><b>${fmt.format(c.total)}</b><span>жалоб владельцев, ${m.years[0]}–${m.years[1]} модельные годы</span></div>
+          <div class="stat"><b>${fmt.format(m.recalls.length)}</b><span>${g.id === "ram-trx" ? "отдельных кампаний только по TRX — общие смотрите во вкладке RAM 1500"
+            : g.id === "ford-raptor" ? "отдельных кампаний только по Raptor — общие смотрите во вкладке F-150"
+            : "отзывных кампаний"}</span></div>
+          <div class="stat"><b>${fmt.format(c.crashes)} / ${fmt.format(c.fires)}</b><span>жалоб, где были ДТП / возгорание</span></div>
+        </div>
+
+        <div class="grid cols-2" style="margin-top:16px">
+          <section class="panel">
+            <h2>Что ломается чаще всего</h2>
+            <p class="dim" style="font-size:13px">Доля жалоб, где упоминается узел. Одна жалоба может касаться нескольких узлов.</p>
+            <ul class="comp-list">
+              ${c.byComponent.slice(0, 10).map(([name, n]) => `
+                <li>
+                  <div class="comp-row"><span>${esc(window.ruComponent(name))}</span><b>${fmt.format(n)} · ${c.total ? Math.round((n / c.total) * 100) : 0}%</b></div>
+                  <div class="comp-bar"><span style="width:${(n / maxComp) * 100}%"></span></div>
+                </li>`).join("")}
+            </ul>
+          </section>
+          <section class="panel">
+            <h2>Жалобы по модельным годам</h2>
+            <p class="dim" style="font-size:13px">У свежих годов жалоб меньше: машины ещё не успели накатать пробег.</p>
+            <div class="year-bars">
+              ${years.map(([y, v]) => `
+                <div class="year-bar">
+                  <span class="v">${fmt.format(v)}</span>
+                  <span class="b" style="height:${Math.max(4, (v / maxYear) * 140)}px"></span>
+                  <span class="y">${esc(y)}</span>
+                </div>`).join("")}
+            </div>
+          </section>
+        </div>
+
+        <section class="panel" style="margin-top:16px">
+          <h2>Отзывные кампании</h2>
+          ${recalls.length ? `
+            <ul class="recalls">${recalls.slice(0, firstN).map(recallItem).join("")}</ul>
+            ${recalls.length > firstN ? `
+              <details class="more">
+                <summary>Показать ещё ${recalls.length - firstN}</summary>
+                <ul class="recalls">${recalls.slice(firstN).map(recallItem).join("")}</ul>
+              </details>` : ""}
+          ` : '<p class="muted">Отдельных отзывных кампаний в базе не найдено.</p>'}
+        </section>
+
+        <p class="dim" style="font-size:13px;margin-top:16px">
+          Данные: NHTSA, выгрузка от ${esc(window.NHTSA.generated)}. Названия моделей в базе: ${esc(m.nhtsaNames.join(", ") || "—")}.
+        </p>`;
+    }
+
+    tabs.addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-id]");
+      if (!b) return;
+      history.replaceState(null, "", "#" + b.dataset.id);
+      render(b.dataset.id);
+    });
+    render((location.hash || "").slice(1) || GROUPS[0].id);
+  }
+
+  /* =========================================================
    * Калькулятор
    * ========================================================= */
   const form = document.getElementById("calc-form");
