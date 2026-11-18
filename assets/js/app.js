@@ -234,8 +234,11 @@
   if (qs.get("price") && +qs.get("price") > 0) el.price.value = qs.get("price");
   if (qs.get("gvwr") && +qs.get("gvwr") > 0) el.gvwr.value = qs.get("gvwr");
 
-  el.preset.addEventListener("change", () => { applyPreset(el.preset.value); compute(); });
-  form.addEventListener("input", (e) => { if (e.target !== el.preset) compute(); });
+  // Цель для аналитики: человек сам что-то поменял в калькуляторе (один раз за визит)
+  const track = () => { if (typeof window.trackGoal === "function") window.trackGoal("calc_used", true); };
+
+  el.preset.addEventListener("change", () => { applyPreset(el.preset.value); compute(); track(); });
+  form.addEventListener("input", (e) => { if (e.target !== el.preset) { compute(); track(); } });
   form.addEventListener("submit", (e) => e.preventDefault());
   compute();
 })();
