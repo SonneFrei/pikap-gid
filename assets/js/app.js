@@ -184,6 +184,84 @@
   }
 
   /* =========================================================
+   * Материал «Граница 3,5 т»: интерактивная проверка массы
+   * ========================================================= */
+  const massTool = document.getElementById("mass-tool");
+  if (massTool) {
+    const range = document.getElementById("mass-range");
+    const numIn = document.getElementById("mass-num");
+    const out = document.getElementById("mass-result");
+    const presets = [
+      { label: "F-150 Raptor", kg: 3334 },
+      { label: "RAM 1500 (тяжёлая версия)", kg: 3400 },
+      { label: "TRX — ПТС №1", kg: 3300 },
+      { label: "TRX — ПТС №2", kg: 3538 },
+      { label: "SRT TRX 2027 (оценка)", kg: 3600 },
+      { label: "RAM 2500 (оценка)", kg: 4300 }
+    ];
+    const presetBox = document.getElementById("mass-presets");
+    presetBox.innerHTML = presets.map((p, i) => `<button type="button" data-i="${i}">${esc(p.label)} · ${fmt.format(p.kg)} кг</button>`).join("");
+
+    const item = (state, title, text) => `
+      <li class="mi ${state}">
+        <span class="mi-icon" aria-hidden="true">${state === "ok" ? "✓" : state === "bad" ? "✕" : "?"}</span>
+        <div><b>${title}</b>${text ? `<span>${text}</span>` : ""}</div>
+      </li>`;
+
+    function update(kg, from) {
+      kg = Math.round(+kg || 0);
+      if (from !== "range") range.value = Math.min(Math.max(kg, +range.min), +range.max);
+      if (from !== "num") numIn.value = kg;
+      [...presetBox.children].forEach((b) => b.setAttribute("aria-selected", String(presets[+b.dataset.i].kg === kg)));
+
+      const over = kg > 3500;
+      const margin = 3500 - kg;
+      const row = window.utilRow(kg);
+      const items = [];
+
+      items.push(over
+        ? item("bad", `Права: нужна категория ${kg > 7500 ? "C" : "C1 или C"}`, "С категорией B за руль садиться нельзя — это езда без прав нужной категории.")
+        : item("ok", "Права: достаточно категории B", ""));
+      items.push(over
+        ? item("bad", "Под знак 3.4 «Движение грузовых запрещено» — нельзя", "Даже если на знаке нет цифры. Штраф — 5 000 ₽, в Москве и Петербурге — 7 500 ₽.")
+        : item("ok", "Под знак 3.4 без цифры — можно", "Знак без цифры запрещает проезд только грузовикам тяжелее 3,5 т. Если на знаке есть табличка или цифра — смотрите её."));
+      items.push(over
+        ? item("bad", "Скорость: не больше 70 км/ч за городом и 90 на автомагистрали", "Как у грузовика (п. 10.3 ПДД).")
+        : item("ok", "Скорость как у легковых: до 90 км/ч за городом, до 110 на автомагистрали", "п. 10.3 ПДД"));
+      if (over) items.push(item("bad", "На автомагистрали — не дальше второй полосы", "Штраф 1 000 ₽ (КоАП 12.11)."));
+      items.push(over
+        ? item("bad", "Стоянка во дворах (жилая зона) — только в специально обозначенных местах", "п. 17.2 ПДД.")
+        : item("ok", "Стоянка в жилой зоне — как у всех", ""));
+      if (kg > 2500) items.push(item("bad", "Крайняя левая полоса на дорогах от трёх полос — только для поворота", "Действует для любого пикапа тяжелее 2,5 т, даже легче 3,5 т (п. 9.4 ПДД)."));
+      items.push(item("check", "Въезд в центр Москвы", over
+        ? "Для грузовиков тяжелее 3,5 т действует грузовой каркас — скорее всего, понадобится пропуск. Правила для пикапов мы ещё уточняем."
+        : "Для лёгких грузовиков источники называют порог по грузоподъёмности (около 1 т) — уточняем по первоисточнику."));
+      items.push(kg <= 5000
+        ? item(over ? "check" : "ok", `Утильсбор (как грузовик, новая машина): ${rub(row.new)}`,
+          over ? `Строка «${row.label}» — на ${rub(row.new - window.RULES.util.rows[1].new)} больше, чем до 3,5 т. Но если машину оформят как легковую (M1G), счёт пойдёт на миллионы.` : `Строка «${row.label}».`)
+        : item("check", "Утильсбор", "Больше 5 т — другие ставки, вне этого расчёта."));
+
+      out.innerHTML = `
+        <div class="mass-verdict ${over ? "bad" : margin <= 150 ? "warn" : "ok"}">
+          ${over
+            ? `<b>${fmt.format(kg)} кг — это больше 3,5 т на ${fmt.format(-margin)} кг.</b> Для закона это уже другая машина.`
+            : margin <= 150
+              ? `<b>${fmt.format(kg)} кг — в пределах 3,5 т, но запас всего ${fmt.format(margin)} кг.</b> Перепроверьте ПТС: такие машины легко оказываются по ту сторону границы.`
+              : `<b>${fmt.format(kg)} кг — в пределах 3,5 т</b> (запас ${fmt.format(margin)} кг).`}
+        </div>
+        <ul class="mass-items">${items.join("")}</ul>`;
+    }
+
+    range.addEventListener("input", () => update(range.value, "range"));
+    numIn.addEventListener("input", () => update(numIn.value, "num"));
+    presetBox.addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-i]");
+      if (b) update(presets[+b.dataset.i].kg);
+    });
+    update(3538);
+  }
+
+  /* =========================================================
    * Сравнения лоб в лоб
    * ========================================================= */
   const compareRoot = document.getElementById("compare-root");
@@ -491,6 +569,7 @@
             <li>Для въезда в центр Москвы, скорее всего, понадобится пропуск — правила проверяем.</li>
             <li>Утильсбор считается по строке «3,5–5 т». Встречались случаи, когда такие машины оформляли как легковые M1G — тогда расчёт совсем другой. Уточните у брокера до покупки.</li>
           </ul>
+          <a href="limit-3500.html">Подробный разбор: что меняет граница 3,5 т →</a>
         </div>`);
     } else if (gvwr >= 3400) {
       alerts.push(`
