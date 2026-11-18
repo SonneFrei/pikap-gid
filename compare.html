@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Сравнения лоб в лоб — RAM 1500 vs F-150, TRX vs Raptor R, Silverado vs Sierra</title>
+  <meta name="description" content="Сравниваем американские пикапы по цене в США и в России, моторам, полной массе и порогу 3,5 т, болячкам по данным NHTSA.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="logo" href="index.html">Пикап<span>·</span>Гид</a>
+      <nav class="nav" aria-label="Разделы">
+        <a href="index.html">Главная</a>
+        <a href="models.html">Модели</a>
+        <a href="compare.html" class="active">Сравнить</a>
+        <a href="issues.html">Болячки</a>
+        <a href="calculator.html">Калькулятор</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="page-head">
+      <h1>Лоб в лоб</h1>
+      <p>Главные соперники — на одной странице: цена в США и примерно под ключ в России, моторы, полная масса и запас до порога 3,5 т, что ломается по данным NHTSA. Выберите готовую пару или любые две модели.</p>
+    </div>
+
+    <div class="chips" id="pair-chips" aria-label="Готовые пары"></div>
+
+    <form class="panel compare-pick" id="compare-form" autocomplete="off">
+      <div class="field">
+        <label for="cmp-a">Первая модель</label>
+        <select id="cmp-a"></select>
+      </div>
+      <div class="vs-badge" aria-hidden="true">vs</div>
+      <div class="field">
+        <label for="cmp-b">Вторая модель</label>
+        <select id="cmp-b"></select>
+      </div>
+    </form>
+
+    <div id="compare-root" aria-live="polite"></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© 2026 Пикап·Гид (рабочее название)</span>
+      <span>Расчёты — ориентир, а не оферта. Данные обновлены 19.11.2026.</span>
+    </div>
+  </footer>
+
+  <script src="assets/js/analytics.js"></script>
+  <script src="assets/js/rules.js"></script>
+  <script src="assets/js/models.js"></script>
+  <script src="assets/js/issues-ru.js"></script>
+  <script src="assets/data/nhtsa.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -253,6 +253,23 @@ input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1p
 .badge.danger { background: rgba(255, 107, 91, .14); color: var(--danger); }
 .more summary { cursor: pointer; color: var(--accent-2); font-weight: 700; padding: 10px 0; }
 
+/* ---------- Сравнения ---------- */
+.compare-pick { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: end; margin-bottom: 16px; }
+.compare-pick .field { margin: 0; }
+.vs-badge { font-family: var(--font-head); color: var(--accent); font-size: 20px; padding-bottom: 10px; }
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); }
+table.cmp { width: 100%; border-collapse: collapse; min-width: 560px; font-size: 15px; }
+table.cmp th, table.cmp td { padding: 13px 16px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+table.cmp tbody tr:last-child th, table.cmp tbody tr:last-child td { border-bottom: 0; }
+table.cmp thead th { font-family: var(--font-head); font-size: 17px; font-weight: 600; background: var(--card-2); }
+table.cmp thead .brand { display: block; font-family: var(--font-body); color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+table.cmp tbody th { color: var(--muted); font-weight: 700; width: 28%; font-size: 14px; }
+table.cmp small { color: var(--dim); font-size: 12px; font-weight: 500; }
+table.cmp td.win { background: rgba(255, 138, 31, .08); box-shadow: inset 3px 0 0 var(--accent); font-weight: 700; }
+table.cmp .neg { color: var(--danger); }
+.points { margin: 0; padding-left: 20px; display: grid; gap: 10px; color: var(--muted); }
+.points li::marker { color: var(--accent); }
+
 /* ---------- Плашка cookie ---------- */
 .cookie-bar {
   position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 50;
@@ -282,4 +299,12 @@ input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1p
   .seg:not(.five) { grid-template-columns: 1fr 1fr; }
   section.block { padding: 40px 0; }
   .cookie-bar { flex-direction: column; align-items: stretch; text-align: left; }
+  .compare-pick { grid-template-columns: 1fr; gap: 8px; }
+  table.cmp { min-width: 0; font-size: 13px; table-layout: fixed; }
+  table.cmp th, table.cmp td { padding: 10px 8px; overflow-wrap: anywhere; }
+  table.cmp thead th { font-size: 14px; }
+  table.cmp tbody th { width: 30%; font-size: 12px; }
+  table.cmp small { font-size: 11px; }
+  .vs-badge { text-align: center; padding: 0; }
+  .nav { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
 }

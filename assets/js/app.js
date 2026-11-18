@@ -184,6 +184,201 @@
   }
 
   /* =========================================================
+   * Сравнения лоб в лоб
+   * ========================================================= */
+  const compareRoot = document.getElementById("compare-root");
+  if (compareRoot) {
+    const R = window.RULES;
+    const DEF = { deliveryUsd: 5000, usdRate: 83, eurRate: 95, otherRub: 200000 };
+    const NHTSA_OF = {
+      "ram-1500": "ram-1500", "ram-trx": "ram-trx", "ram-srt-trx": "ram-trx",
+      "ford-f150": "ford-f150", "ford-raptor": "ford-raptor", "ford-raptor-r": "ford-raptor",
+      "chevy-silverado": "chevy-silverado", "gmc-sierra": "gmc-sierra"
+    };
+    const PAIRS = [
+      {
+        a: "ram-1500", b: "ford-f150", title: "RAM 1500 vs F-150",
+        points: [
+          "F-150 дешевле на старте ($37 290 против $40 275) и даёт больше выбора моторов — от V6 2.7 до гибрида PowerBoost.",
+          "Нюанс растаможки: у F-150 2.7 объём меньше 2 800 см³, поэтому пошлина для новой машины — 15%, а у V6 3.5 и V8 — 12,5%. Меньший мотор растаможить дороже в процентах. У RAM все моторы больше 2,8 л — везде 12,5%.",
+          "RAM в 2026 году вернул HEMI V8 5.7 и предлагает рядную «шестёрку» Hurricane до 540 л.с. — это самый мощный мотор в паре (у обычного F-150 максимум 430 л.с., без учёта Raptor).",
+          "Обе модели по полной массе в пределах 3,5 т: права категории B, грузовой утильсбор.",
+          "Отзывных кампаний у F-150 почти вдвое больше (57 против 30), но и продаётся он в разы больше — это не прямое сравнение надёжности. Что именно отзывали — во вкладке «Болячки»."
+        ]
+      },
+      {
+        a: "ram-srt-trx", b: "ford-raptor-r", title: "SRT TRX vs Raptor R",
+        points: [
+          "777 против 720 л.с. и $99 995 против $110 930 — на бумаге новый TRX и мощнее, и дешевле.",
+          "Но главный вопрос для России — масса. У Raptor полная масса 3 334 кг, Raptor R построен на той же базе (официальной цифры нет — сверяйте по ПТС). Новый TRX, по оценке, тяжелее 3,5 т — а это права категории C, запрет проезда под знак 3.4 и утильсбор по другой строке.",
+          "Поэтому до покупки проверьте строку «Разрешённая максимальная масса» в ПТС: для этой пары она важнее, чем 57 л.с. разницы.",
+          "Отдельной статистики жалоб ни по TRX, ни по Raptor NHTSA не ведёт — смотрите общие данные RAM 1500 и F-150 во вкладке «Болячки»."
+        ]
+      },
+      {
+        a: "chevy-silverado", b: "gmc-sierra", title: "Silverado vs Sierra",
+        points: [
+          "По сути, это одна машина: общая платформа, одинаковые моторы (2.7 TurboMax, V8 5.3 и 6.2, дизель 3.0 Duramax) и почти все отзывные кампании общие.",
+          "Разница — в дизайне, оснащении и позиционировании: GMC продаётся как более «премиальная» версия, особенно Denali и AT4X (до $84 200).",
+          "У обоих есть дизель 3.0 Duramax: пошлина для дизеля — 10% вместо 12,5–15% у бензиновых версий.",
+          "Если смотрите V8 6.2 2021–2024 годов, обязательно проверьте по VIN отзывную кампанию 25V274 — дефект шатунов и коленвала, двигатель может разрушиться.",
+          "Стартовые цены по источникам близки ($38 300 у Sierra Pro и $39 695 у Silverado Regular Cab), но данные расходятся — сверяйте с конкретной комплектацией."
+        ]
+      }
+    ];
+
+    // Примерная цена под ключ: базовая версия (первый мотор), новая машина, наши допущения
+    function estimate(m) {
+      if (!m.msrpFrom) return null;
+      const e = m.engines[0];
+      const cv = (m.msrpFrom + DEF.deliveryUsd) * DEF.usdRate;
+      const duty = window.calcDuty(e.fuel, e.cc, "new", cv, DEF.eurRate);
+      const vat = (cv + duty.rub) * R.vat.rate;
+      const fee = window.calcCustomsFee(cv);
+      const util = window.utilRow(m.gvwrDefault).new;
+      return { total: cv + duty.rub + vat + fee + util + DEF.otherRub, engine: e };
+    }
+
+    const dutyLabels = (m) => {
+      const set = new Map();
+      m.engines.forEach((e) => {
+        const d = window.calcDuty(e.fuel, e.cc, "new", 1000000, DEF.eurRate).label;
+        const short = e.name.split(" ").slice(0, 2).join(" ");
+        const list = set.get(d) || [];
+        if (!list.includes(short)) list.push(short);
+        set.set(d, list);
+      });
+      return [...set.entries()].map(([d, names]) => `${d} (${names.join(", ")})`).join("<br>");
+    };
+
+    const selA = document.getElementById("cmp-a");
+    const selB = document.getElementById("cmp-b");
+    const opts = window.MODELS.map((m) => `<option value="${esc(m.id)}">${esc(m.brand + " " + m.name)}</option>`).join("");
+    selA.innerHTML = opts; selB.innerHTML = opts;
+
+    const chips = document.getElementById("pair-chips");
+    chips.innerHTML = PAIRS.map((p, i) => `<button type="button" data-pair="${i}">${esc(p.title)}</button>`).join("") +
+      '<button type="button" data-pair="custom">Свои две модели</button>';
+
+    function row(label, va, vb, win) {
+      // win: "a" | "b" | null — подсветка того, кто выигрывает
+      return `
+        <tr>
+          <th scope="row">${label}</th>
+          <td class="${win === "a" ? "win" : ""}">${va}</td>
+          <td class="${win === "b" ? "win" : ""}">${vb}</td>
+        </tr>`;
+    }
+    const better = (a, b, lowerIsBetter) => {
+      if (a == null || b == null || a === b) return null;
+      return (lowerIsBetter ? a < b : a > b) ? "a" : "b";
+    };
+
+    function render(aId, bId, pair) {
+      const A = window.findModel(aId), B = window.findModel(bId);
+      selA.value = aId; selB.value = bId;
+      [...chips.children].forEach((c) => c.setAttribute("aria-selected", String(
+        pair ? c.dataset.pair === String(PAIRS.indexOf(pair)) : c.dataset.pair === "custom")));
+      if (!A || !B) return;
+
+      const eA = estimate(A), eB = estimate(B);
+      const hpMax = (m) => Math.max(...m.engines.map((e) => e.hp));
+      const hpRange = (m) => { const h = m.engines.map((e) => e.hp); return Math.min(...h) === Math.max(...h) ? `${Math.min(...h)}` : `${Math.min(...h)}–${Math.max(...h)}`; };
+      const margin = (m) => R.massLimitKg - m.gvwrKg[1];
+      const massCell = (m) => {
+        const mg = margin(m);
+        const range = m.gvwrKg[0] === m.gvwrKg[1] ? fmt.format(m.gvwrKg[0]) : `${fmt.format(m.gvwrKg[0])}–${fmt.format(m.gvwrKg[1])}`;
+        return `${range} кг${m.gvwrCheck ? ' <span class="badge check">проверить</span>' : ""}<br><small>${mg >= 0 ? `запас до 3,5 т: ${fmt.format(mg)} кг` : `<span class="neg">может превышать 3,5 т на ${fmt.format(-mg)} кг</span>`}</small>`;
+      };
+      const license = (m) => m.gvwrKg[1] > R.massLimitKg
+        ? (m.gvwrKg[0] > R.massLimitKg ? "C" : "B или C — смотрите РММ в ПТС")
+        : "B";
+      const nh = (m) => window.NHTSA && window.NHTSA.models[NHTSA_OF[m.id]];
+      const complaintsCell = (m) => {
+        const d = nh(m);
+        if (!d) return "—";
+        const top = d.complaints.byComponent.slice(0, 3).map(([n]) => window.ruComponent(n)).join(", ");
+        const derived = NHTSA_OF[m.id] === "ram-trx" || NHTSA_OF[m.id] === "ford-raptor";
+        const n = d.complaints.total, n10 = n % 10, n100 = n % 100;
+        const word = n10 === 1 && n100 !== 11 ? "жалоба" : n10 >= 2 && n10 <= 4 && (n100 < 12 || n100 > 14) ? "жалобы" : "жалоб";
+        return `${derived ? "мало данных: " : ""}${esc(top)}<br><small>${fmt.format(n)} ${word}${derived ? " с упоминанием модели" : ""}</small>`;
+      };
+      const recallsCell = (m) => { const d = nh(m); return d ? fmt.format(d.recalls.length) : "—"; };
+      const hasDiesel = (m) => m.engines.some((e) => e.fuel === "diesel");
+
+      compareRoot.innerHTML = `
+        <div class="table-wrap">
+          <table class="cmp">
+            <thead>
+              <tr><th></th>
+                <th><span class="brand">${esc(A.brand)}</span>${esc(A.name)}</th>
+                <th><span class="brand">${esc(B.brand)}</span>${esc(B.name)}</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${row("Цена в США от", A.msrpFrom ? usd(A.msrpFrom) : "уточняем", B.msrpFrom ? usd(B.msrpFrom) : "уточняем", better(A.msrpFrom, B.msrpFrom, true))}
+              ${row("Примерно под ключ в России<br><small>новая, базовая версия</small>",
+                eA ? `${rub(eA.total)}<br><small>${esc(eA.engine.name)}</small>` : "—",
+                eB ? `${rub(eB.total)}<br><small>${esc(eB.engine.name)}</small>` : "—",
+                better(eA && eA.total, eB && eB.total, true))}
+              ${row("Мощность, л.с.", hpRange(A), hpRange(B), better(hpMax(A), hpMax(B), false))}
+              ${row("Моторы", A.engines.map((e) => esc(e.name)).join("<br>"), B.engines.map((e) => esc(e.name)).join("<br>"), null)}
+              ${row("Дизель", hasDiesel(A) ? "есть" : "нет", hasDiesel(B) ? "есть" : "нет", null)}
+              ${row("Пошлина для новой", dutyLabels(A), dutyLabels(B), null)}
+              ${row("Полная масса (РММ)", massCell(A), massCell(B), better(margin(A), margin(B), false))}
+              ${row("Права", license(A), license(B), null)}
+              ${row("Что чаще всего ломается<br><small>по жалобам NHTSA</small>", complaintsCell(A), complaintsCell(B), null)}
+              ${row("Отзывных кампаний<br><small>меньше — не значит надёжнее</small>", recallsCell(A), recallsCell(B), null)}
+            </tbody>
+          </table>
+        </div>
+        <p class="dim" style="font-size:13px;margin:10px 0 0">
+          Подсвечено, кто выигрывает по строке. «Под ключ» — по нашим допущениям: доставка $${fmt.format(DEF.deliveryUsd)}, курс ${DEF.usdRate} ₽/$, прочие расходы ${fmt.format(DEF.otherRub)} ₽.
+          Свою конфигурацию посчитайте в <a href="calculator.html">калькуляторе</a>.
+        </p>
+
+        ${pair ? `
+          <section class="panel" style="margin-top:16px">
+            <h2>Разбор: ${esc(pair.title)}</h2>
+            <ul class="points">${pair.points.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>
+          </section>` : ""}
+
+        <div class="grid cols-2" style="margin-top:16px">
+          ${[A, B].map((m) => `
+            <div class="card">
+              <div class="top"><span class="num">${esc(m.brand)}</span></div>
+              <h3>${esc(m.name)}</h3>
+              <p>${esc(m.tagline)}</p>
+              <div class="foot" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+                <a class="btn" style="padding:10px 16px;font-size:14px" href="calculator.html?engine=${encodeURIComponent(m.engines[0].id)}">Посчитать</a>
+                <a class="btn ghost" style="padding:10px 16px;font-size:14px" href="issues.html#${encodeURIComponent(NHTSA_OF[m.id])}">Болячки</a>
+              </div>
+            </div>`).join("")}
+        </div>`;
+
+      history.replaceState(null, "", `?a=${encodeURIComponent(aId)}&b=${encodeURIComponent(bId)}`);
+    }
+
+    const findPair = (a, b) => PAIRS.find((p) => (p.a === a && p.b === b) || (p.a === b && p.b === a));
+
+    chips.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-pair]");
+      if (!btn) return;
+      if (btn.dataset.pair === "custom") { render(selA.value, selB.value, null); selA.focus(); return; }
+      const p = PAIRS[+btn.dataset.pair];
+      render(p.a, p.b, p);
+    });
+    const onSelect = () => render(selA.value, selB.value, findPair(selA.value, selB.value) || null);
+    selA.addEventListener("change", onSelect);
+    selB.addEventListener("change", onSelect);
+
+    const q = new URLSearchParams(location.search);
+    const qa = q.get("a"), qb = q.get("b");
+    if (qa && qb && window.findModel(qa) && window.findModel(qb)) render(qa, qb, findPair(qa, qb) || null);
+    else render(PAIRS[0].a, PAIRS[0].b, PAIRS[0]);
+  }
+
+  /* =========================================================
    * Калькулятор
    * ========================================================= */
   const form = document.getElementById("calc-form");
