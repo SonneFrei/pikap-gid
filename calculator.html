@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Сколько стоит пикап в России — калькулятор растаможки</title>
+  <meta name="description" content="Калькулятор полной стоимости американского пикапа в России: цена в США, доставка, пошлина, НДС, таможенный сбор и утильсбор с источниками.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="logo" href="index.html">Пикап<span>·</span>Гид</a>
+      <nav class="nav" aria-label="Разделы">
+        <a href="index.html">Главная</a>
+        <a href="models.html">Модели</a>
+        <a href="calculator.html" class="active">Калькулятор</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="page-head">
+      <h1>Сколько стоит в России</h1>
+      <p>Выберите модель и мотор — подставим типовые параметры. Если знаете цифры конкретной машины (особенно полную массу из ПТС), замените их: расчёт обновится сразу.</p>
+    </div>
+
+    <div class="calc">
+      <form class="panel" id="calc-form" autocomplete="off">
+        <h2>Машина</h2>
+        <div class="field">
+          <label for="preset">Модель и мотор</label>
+          <select id="preset"></select>
+          <span class="hint" id="preset-info"></span>
+        </div>
+
+        <div class="field">
+          <label>Состояние и возраст на момент ввоза</label>
+          <div class="seg five">
+            <input type="radio" name="age" id="age-new" value="new" checked><label for="age-new">Новая</label>
+            <input type="radio" name="age" id="age-lt3" value="lt3"><label for="age-lt3">Б/у до 3 лет</label>
+            <input type="radio" name="age" id="age-3to5" value="3to5"><label for="age-3to5">3–5 лет</label>
+            <input type="radio" name="age" id="age-5to7" value="5to7"><label for="age-5to7">5–7 лет</label>
+            <input type="radio" name="age" id="age-gt7" value="gt7"><label for="age-gt7">7+ лет</label>
+          </div>
+          <span class="hint">«Новая» — машина ни дня не была в эксплуатации. Для пошлины это важно: б/у даже годовалая платит больше.</span>
+        </div>
+
+        <div class="field">
+          <label>Двигатель</label>
+          <div class="seg two">
+            <input type="radio" name="fuel" id="fuel-petrol" value="petrol" checked><label for="fuel-petrol">Бензин / гибрид</label>
+            <input type="radio" name="fuel" id="fuel-diesel" value="diesel"><label for="fuel-diesel">Дизель</label>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="cc">Объём, см³</label>
+            <input id="cc" inputmode="numeric" value="5654">
+          </div>
+          <div class="field">
+            <label for="gvwr">Полная масса, кг</label>
+            <input id="gvwr" inputmode="numeric" value="3130">
+          </div>
+        </div>
+        <p class="hint dim" style="margin:-6px 0 18px;font-size:12px">Полная масса — строка «Разрешённая максимальная масса» в ПТС. От неё зависят утильсбор, категория прав и знак 3.4.</p>
+
+        <h2>Деньги</h2>
+        <div class="field-row">
+          <div class="field">
+            <label for="price">Цена в США, $</label>
+            <input id="price" inputmode="numeric" value="40275">
+          </div>
+          <div class="field">
+            <label for="delivery">Доставка до РФ, $</label>
+            <input id="delivery" inputmode="numeric" value="5000">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="usdRate">Курс доллара, ₽</label>
+            <input id="usdRate" inputmode="decimal" value="83">
+          </div>
+          <div class="field">
+            <label for="eurRate">Курс евро, ₽</label>
+            <input id="eurRate" inputmode="decimal" value="95">
+          </div>
+        </div>
+        <div class="field">
+          <label for="other">Прочие расходы в России, ₽</label>
+          <input id="other" inputmode="numeric" value="200000">
+          <span class="hint">Брокер, склад временного хранения, СБКТС и ЭПТС, доставка до вашего города.</span>
+        </div>
+        <p class="assume">Доставка, курсы и прочие расходы — примерные допущения. Морская доставка из США стоит примерно $2 800–5 000 (Ro-Ro дешевле контейнера), но маршруты в Россию идут через третьи страны, и ставки меняются почти каждую неделю. Поставьте курс ЦБ на сегодня и цифры от импортёра.</p>
+      </form>
+
+      <section class="panel" id="calc-result" aria-live="polite"></section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© 2026 Пикап·Гид (рабочее название)</span>
+      <span>Расчёты — ориентир, а не оферта. Данные обновлены 19.11.2026.</span>
+    </div>
+  </footer>
+
+  <script src="assets/js/rules.js"></script>
+  <script src="assets/js/models.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
