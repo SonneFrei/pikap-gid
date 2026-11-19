@@ -6,6 +6,26 @@
   const usd = (n) => "$" + fmt.format(Math.round(n));
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
+  // Официальный курс ЦБ РФ (зеркало cbr-xml-daily.ru, обновляется ежедневно).
+  // Если недоступно — остаются значения по умолчанию.
+  let cbrPromise = null;
+  window.loadCbrRates = function () {
+    if (!cbrPromise) {
+      const ctrl = typeof AbortController !== "undefined" ? new AbortController() : null;
+      const timer = ctrl ? setTimeout(() => ctrl.abort(), 5000) : null;
+      cbrPromise = fetch("https://www.cbr-xml-daily.ru/daily_json.js", ctrl ? { signal: ctrl.signal } : {})
+        .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+        .then((d) => ({
+          usd: Math.round(d.Valute.USD.Value * 100) / 100,
+          eur: Math.round(d.Valute.EUR.Value * 100) / 100,
+          date: new Date(d.Date).toLocaleDateString("ru-RU")
+        }))
+        .catch(() => null)
+        .finally(() => timer && clearTimeout(timer));
+    }
+    return cbrPromise;
+  };
+
   const statusBadge = (status) =>
     status === "ok"
       ? '<span class="badge ok">проверено</span>'
@@ -267,7 +287,7 @@
   const compareRoot = document.getElementById("compare-root");
   if (compareRoot) {
     const R = window.RULES;
-    const DEF = { deliveryUsd: 5000, usdRate: 83, eurRate: 95, otherRub: 200000 };
+    const DEF = { deliveryUsd: 5000, usdRate: 82, eurRate: 90, otherRub: 200000 };
     const NHTSA_OF = {
       "ram-1500": "ram-1500", "ram-trx": "ram-trx", "ram-srt-trx": "ram-trx",
       "ford-f150": "ford-f150", "ford-raptor": "ford-raptor", "ford-raptor-r": "ford-raptor",
@@ -352,7 +372,15 @@
       return (lowerIsBetter ? a < b : a > b) ? "a" : "b";
     };
 
+    let current = null;
+    window.loadCbrRates().then((r) => {
+      if (!r) return;
+      DEF.usdRate = r.usd; DEF.eurRate = r.eur; DEF.rateDate = r.date;
+      if (current) render(...current);
+    });
+
     function render(aId, bId, pair) {
+      current = [aId, bId, pair];
       const A = window.findModel(aId), B = window.findModel(bId);
       selA.value = aId; selB.value = bId;
       [...chips.children].forEach((c) => c.setAttribute("aria-selected", String(
@@ -411,7 +439,7 @@
           </table>
         </div>
         <p class="dim" style="font-size:13px;margin:10px 0 0">
-          Подсвечено, кто выигрывает по строке. «Под ключ» — по нашим допущениям: доставка $${fmt.format(DEF.deliveryUsd)}, курс ${DEF.usdRate} ₽/$, прочие расходы ${fmt.format(DEF.otherRub)} ₽.
+          Подсвечено, кто выигрывает по строке. «Под ключ» — по нашим допущениям: доставка $${fmt.format(DEF.deliveryUsd)}, курс ${String(DEF.usdRate).replace(".", ",")} ₽/$${DEF.rateDate ? ` (ЦБ РФ на ${DEF.rateDate})` : ""}, прочие расходы ${fmt.format(DEF.otherRub)} ₽.
           Свою конфигурацию посчитайте в <a href="calculator.html">калькуляторе</a>.
         </p>
 
@@ -749,6 +777,20 @@
 
   // Цель для аналитики: человек сам что-то поменял в калькуляторе (один раз за визит)
   const track = () => { if (typeof window.trackGoal === "function") window.trackGoal("calc_used", true); };
+
+  // Подставляем сегодняшний курс ЦБ, если человек ещё не менял курс вручную
+  let ratesTouched = false;
+  el.usdRate.addEventListener("input", () => { ratesTouched = true; });
+  el.eurRate.addEventListener("input", () => { ratesTouched = true; });
+  window.loadCbrRates().then((rates) => {
+    const hint = document.getElementById("rate-hint");
+    if (!rates) { if (hint) hint.textContent = "Курс ЦБ загрузить не удалось — поставьте сегодняшний вручную."; return; }
+    if (ratesTouched) { if (hint) hint.textContent = `Курс ЦБ РФ на ${rates.date}: $ — ${rates.usd} ₽, € — ${rates.eur} ₽.`; return; }
+    el.usdRate.value = rates.usd;
+    el.eurRate.value = rates.eur;
+    if (hint) hint.textContent = `Курс ЦБ РФ на ${rates.date} подставлен автоматически — можно поменять.`;
+    compute();
+  });
 
   el.fuelSel.addEventListener("input", () => { el.fuelPrice.value = R.fuel.prices[el.fuelSel.value] || el.fuelPrice.value; });
   el.preset.addEventListener("change", () => { applyPreset(el.preset.value); compute(); track(); });

@@ -1,4 +1,4 @@
-/* Сгенерировано tools/nhtsa_fetch.py — не редактировать вручную. */
+/* Сгенерировано scripts/nhtsa_fetch.py — не редактировать вручную. */
 window.NHTSA = {
  "generated": "2026-11-19",
  "source": "NHTSA (api.nhtsa.gov)",
