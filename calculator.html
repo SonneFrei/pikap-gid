@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=20261120c">
+  <link rel="stylesheet" href="assets/css/style.css?v=20261120d">
 </head>
 <body>
   <header class="site-header">
@@ -116,6 +116,33 @@
           <input id="other" inputmode="numeric" value="200000">
           <span class="hint">Брокер, склад временного хранения, СБКТС и ЭПТС, доставка до вашего города.</span>
         </div>
+        <h2 style="margin-top:8px">Эксплуатация</h2>
+        <div class="field-row">
+          <div class="field">
+            <label for="km">Пробег в год, км</label>
+            <input id="km" inputmode="numeric" value="18500">
+          </div>
+          <div class="field">
+            <label for="l100">Расход, л/100 км</label>
+            <input id="l100" inputmode="decimal" value="13.1">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="fuel">Топливо</label>
+            <select id="fuel">
+              <option value="ai92">АИ-92</option>
+              <option value="ai95" selected>АИ-95</option>
+              <option value="ai98">АИ-98</option>
+              <option value="dt">Дизель</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="fuelPrice">Цена за литр, ₽</label>
+            <input id="fuelPrice" inputmode="decimal" value="76.33">
+          </div>
+        </div>
+        <p class="hint dim" id="fuel-hint" style="margin:-6px 0 18px;font-size:12px"></p>
         <p class="assume">Доставка, курсы и прочие расходы — примерные допущения. Морская доставка из США стоит примерно $2 800–5 000 (Ro-Ro дешевле контейнера), но маршруты в Россию идут через третьи страны, и ставки меняются почти каждую неделю. Поставьте курс ЦБ на сегодня и цифры от импортёра.</p>
       </form>
 
@@ -130,9 +157,9 @@
     </div>
   </footer>
 
-  <script src="assets/js/analytics.js?v=20261120c"></script>
-  <script src="assets/js/rules.js?v=20261120c"></script>
-  <script src="assets/js/models.js?v=20261120c"></script>
-  <script src="assets/js/app.js?v=20261120c"></script>
+  <script src="assets/js/analytics.js?v=20261120d"></script>
+  <script src="assets/js/rules.js?v=20261120d"></script>
+  <script src="assets/js/models.js?v=20261120d"></script>
+  <script src="assets/js/app.js?v=20261120d"></script>
 </body>
 </html>

@@ -310,6 +310,7 @@ table.cmp .neg { color: var(--danger); }
 /* ---------- Калькулятор: владение и заявка ---------- */
 .own { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
 .own h3 { font-size: 16px; margin-bottom: 12px; }
+.own-sub { margin: -6px 0 8px; color: var(--muted); font-size: 13px; font-weight: 700; }
 .own-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .own-card { background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 14px; display: grid; gap: 4px; }
 .own-card.main { border-color: rgba(255, 138, 31, .5); }

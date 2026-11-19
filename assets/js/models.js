@@ -5,7 +5,10 @@
  * gvwrKg — разрешённая максимальная масса (полная масса, РММ / GVWR), кг.
  *   От неё зависят: строка утильсбора, категория прав (B / C), знак 3.4, пропуска.
  * msrpFrom — стартовая цена в США, $, без доставки по США (destination).
- * Обновлено: 19.11.2026
+ * mpg — расход EPA в смешанном цикле (миль на галлон), grade — тип топлива по EPA
+ *   (regular / midgrade / premium / diesel). Источник: fueleconomy.gov, 2026 модельный год
+ *   (TRX 2021–2024 — 2024 год; Hurricane HO — данные EPA за 2025 год; Sierra 3.0 дизель — как у Silverado).
+ * Обновлено: 20.11.2026
  */
 window.MODELS = [
   {
@@ -22,10 +25,10 @@ window.MODELS = [
     gvwrNote: "Tradesman Crew Cab — 6 900 lb ≈ 3 130 кг.",
     gvwrCheck: true,
     engines: [
-      { id: "ram-1500-36", name: "3.6 V6 Pentastar eTorque", fuel: "petrol", cc: 3604, hp: 305, note: "мягкий гибрид" },
-      { id: "ram-1500-57", name: "5.7 V8 HEMI", fuel: "petrol", cc: 5654, hp: 395, note: "вернулся в 2026 году" },
-      { id: "ram-1500-so", name: "3.0 I6 Hurricane SO", fuel: "petrol", cc: 2998, hp: 420, note: "twin-turbo" },
-      { id: "ram-1500-ho", name: "3.0 I6 Hurricane HO", fuel: "petrol", cc: 2998, hp: 540, note: "RHO, Tungsten" }
+      { id: "ram-1500-36", name: "3.6 V6 Pentastar eTorque", fuel: "petrol", cc: 3604, hp: 305, note: "мягкий гибрид", mpg: 21, grade: "regular" },
+      { id: "ram-1500-57", name: "5.7 V8 HEMI", fuel: "petrol", cc: 5654, hp: 395, note: "вернулся в 2026 году", mpg: 18, grade: "midgrade" },
+      { id: "ram-1500-so", name: "3.0 I6 Hurricane SO", fuel: "petrol", cc: 2998, hp: 420, note: "twin-turbo", mpg: 20, grade: "regular" },
+      { id: "ram-1500-ho", name: "3.0 I6 Hurricane HO", fuel: "petrol", cc: 2998, hp: 540, note: "RHO, Tungsten", mpg: 17, grade: "premium" }
     ],
     rivals: ["ford-f150", "chevy-silverado", "gmc-sierra"],
     sources: [
@@ -47,7 +50,7 @@ window.MODELS = [
     gvwrNote: "Встречается 3 175–3 300 кг и 3 538 кг — решает запись в конкретном ПТС.",
     gvwrCheck: true,
     engines: [
-      { id: "ram-trx-62", name: "6.2 V8 Supercharged HEMI", fuel: "petrol", cc: 6166, hp: 702, note: "компрессор" }
+      { id: "ram-trx-62", name: "6.2 V8 Supercharged HEMI", fuel: "petrol", cc: 6166, hp: 702, note: "компрессор", mpg: 12, grade: "premium" }
     ],
     rivals: ["ford-raptor-r"],
     sources: [
@@ -69,7 +72,7 @@ window.MODELS = [
     gvwrNote: "Официальной полной массы пока нет. Снаряжённая — около 3 175 кг (оценка), поэтому РММ, скорее всего, выше 3,5 т. Ждём реальных ПТС.",
     gvwrCheck: true,
     engines: [
-      { id: "srt-trx-62", name: "6.2 V8 Supercharged HEMI", fuel: "petrol", cc: 6166, hp: 777, note: "компрессор, только полный привод" }
+      { id: "srt-trx-62", name: "6.2 V8 Supercharged HEMI", fuel: "petrol", cc: 6166, hp: 777, note: "компрессор, только полный привод", mpg: 12, grade: "premium" }
     ],
     rivals: ["ford-raptor-r"],
     sources: [
@@ -91,10 +94,10 @@ window.MODELS = [
     gvwrNote: "6 220–7 350 lb — все версии в пределах 3,5 т.",
     gvwrCheck: false,
     engines: [
-      { id: "f150-27", name: "2.7 V6 EcoBoost", fuel: "petrol", cc: 2694, hp: 325, note: "до 2 800 см³ → пошлина 15%" },
-      { id: "f150-35", name: "3.5 V6 EcoBoost", fuel: "petrol", cc: 3496, hp: 400, note: "" },
-      { id: "f150-50", name: "5.0 V8 Coyote", fuel: "petrol", cc: 4951, hp: 400, note: "" },
-      { id: "f150-pb", name: "3.5 V6 PowerBoost", fuel: "petrol", cc: 3496, hp: 430, note: "полный гибрид; считаем как бензин — проверить" }
+      { id: "f150-27", name: "2.7 V6 EcoBoost", fuel: "petrol", cc: 2694, hp: 325, note: "до 2 800 см³ → пошлина 15%", mpg: 20, grade: "regular" },
+      { id: "f150-35", name: "3.5 V6 EcoBoost", fuel: "petrol", cc: 3496, hp: 400, note: "", mpg: 19, grade: "regular" },
+      { id: "f150-50", name: "5.0 V8 Coyote", fuel: "petrol", cc: 4951, hp: 400, note: "", mpg: 19, grade: "regular" },
+      { id: "f150-pb", name: "3.5 V6 PowerBoost", fuel: "petrol", cc: 3496, hp: 430, note: "полный гибрид; считаем как бензин — проверить", mpg: 23, grade: "regular" }
     ],
     rivals: ["ram-1500", "chevy-silverado", "gmc-sierra"],
     sources: [
@@ -116,7 +119,7 @@ window.MODELS = [
     gvwrNote: "7 350 lb (SuperCrew 4x4) — в пределах 3,5 т, но запас всего 166 кг.",
     gvwrCheck: false,
     engines: [
-      { id: "raptor-35", name: "3.5 V6 EcoBoost High Output", fuel: "petrol", cc: 3496, hp: 450, note: "" }
+      { id: "raptor-35", name: "3.5 V6 EcoBoost High Output", fuel: "petrol", cc: 3496, hp: 450, note: "", mpg: 16, grade: "regular" }
     ],
     rivals: ["ram-1500"],
     sources: [
@@ -138,7 +141,7 @@ window.MODELS = [
     gvwrNote: "Официальной цифры не нашли; база та же, что у Raptor (7 350 lb), машина тяжелее на ~65–140 кг — сверить по ПТС.",
     gvwrCheck: true,
     engines: [
-      { id: "raptor-r-52", name: "5.2 V8 Supercharged", fuel: "petrol", cc: 5163, hp: 720, note: "компрессор" }
+      { id: "raptor-r-52", name: "5.2 V8 Supercharged", fuel: "petrol", cc: 5163, hp: 720, note: "компрессор", mpg: 12, grade: "premium" }
     ],
     rivals: ["ram-trx"],
     sources: [
@@ -159,10 +162,10 @@ window.MODELS = [
     gvwrNote: "Crew Cab 4WD — 7 000–7 100 lb (3 175–3 220 кг) по данным дилеров. Нижняя граница — оценка для Regular Cab.",
     gvwrCheck: true,
     engines: [
-      { id: "silv-27", name: "2.7 I4 TurboMax", fuel: "petrol", cc: 2727, hp: 310, note: "до 2 800 см³ → пошлина 15%" },
-      { id: "silv-53", name: "5.3 V8", fuel: "petrol", cc: 5328, hp: 355, note: "" },
-      { id: "silv-62", name: "6.2 V8", fuel: "petrol", cc: 6162, hp: 420, note: "" },
-      { id: "silv-30d", name: "3.0 I6 Duramax", fuel: "diesel", cc: 2993, hp: 305, note: "дизель → пошлина 10%" }
+      { id: "silv-27", name: "2.7 I4 TurboMax", fuel: "petrol", cc: 2727, hp: 310, note: "до 2 800 см³ → пошлина 15%", mpg: 18, grade: "regular" },
+      { id: "silv-53", name: "5.3 V8", fuel: "petrol", cc: 5328, hp: 355, note: "", mpg: 17, grade: "regular" },
+      { id: "silv-62", name: "6.2 V8", fuel: "petrol", cc: 6162, hp: 420, note: "", mpg: 17, grade: "premium" },
+      { id: "silv-30d", name: "3.0 I6 Duramax", fuel: "diesel", cc: 2993, hp: 305, note: "дизель → пошлина 10%", mpg: 23, grade: "diesel" }
     ],
     rivals: ["gmc-sierra", "ram-1500", "ford-f150"],
     sources: [
@@ -183,10 +186,10 @@ window.MODELS = [
     gvwrNote: "Платформа та же, что у Silverado: Crew Cab 4WD — около 7 100 lb (3 220 кг). Нижняя граница — оценка.",
     gvwrCheck: true,
     engines: [
-      { id: "sierra-27", name: "2.7 I4 TurboMax", fuel: "petrol", cc: 2727, hp: 310, note: "до 2 800 см³ → пошлина 15%" },
-      { id: "sierra-53", name: "5.3 V8", fuel: "petrol", cc: 5328, hp: 355, note: "" },
-      { id: "sierra-62", name: "6.2 V8", fuel: "petrol", cc: 6162, hp: 420, note: "" },
-      { id: "sierra-30d", name: "3.0 I6 Duramax", fuel: "diesel", cc: 2993, hp: 305, note: "дизель → пошлина 10%" }
+      { id: "sierra-27", name: "2.7 I4 TurboMax", fuel: "petrol", cc: 2727, hp: 310, note: "до 2 800 см³ → пошлина 15%", mpg: 18, grade: "regular" },
+      { id: "sierra-53", name: "5.3 V8", fuel: "petrol", cc: 5328, hp: 355, note: "", mpg: 16, grade: "regular" },
+      { id: "sierra-62", name: "6.2 V8", fuel: "petrol", cc: 6162, hp: 420, note: "", mpg: 16, grade: "premium" },
+      { id: "sierra-30d", name: "3.0 I6 Duramax", fuel: "diesel", cc: 2993, hp: 305, note: "дизель → пошлина 10%", mpg: 23, grade: "diesel" }
     ],
     rivals: ["chevy-silverado", "ram-1500", "ford-f150"],
     sources: [

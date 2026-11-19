@@ -104,9 +104,37 @@ window.RULES = {
     ]
   },
 
+  // Топливо: средние цены по России (Росстат) и средний пробег
+  fuel: {
+    date: "16.11.2026",
+    prices: { ai92: 70.04, ai95: 76.33, ai98: 104.15, dt: 87.09 },
+    labels: { ai92: "АИ-92", ai95: "АИ-95", ai98: "АИ-98", dt: "Дизель" },
+    // EPA-класс топлива → российская марка (американская шкала AKI ниже нашей RON примерно на 4–5 единиц)
+    gradeToFuel: { regular: "ai92", midgrade: "ai95", premium: "ai98", diesel: "dt" },
+    gradeNote: {
+      regular: "Производитель: regular (87 по американской шкале) — это примерно наш АИ-92.",
+      midgrade: "Производитель: midgrade (89 по американской шкале) — это примерно АИ-93–94, у нас — АИ-95.",
+      premium: "Производитель: premium (91+ по американской шкале) — это примерно АИ-95–98. АИ-95 — минимум, АИ-98 — с запасом.",
+      diesel: "Дизельное топливо."
+    },
+    mileageKm: 18500,
+    status: "ok",
+    note: "Расход — официальные данные EPA (США) в смешанном цикле. Зимой, в пробках и с прицепом реальный расход обычно выше на 10–20%. Цены — средние по России по данным Росстата; в вашем регионе и на вашей АЗС они могут отличаться. Средний пробег — оценка «Автостата» для машин 3–5 лет (у пикапов, по данным Auto.ru, — около 19,5 тыс. км).",
+    sources: [
+      { title: "Росстат: потребительские цены на бензин, 18.11.2026", url: "https://rosstat.gov.ru/storage/mediabank/175_18-11-2026.pdf" },
+      { title: "Calcus: цены на бензин и дизель (по данным Росстата)", url: "https://calcus.ru/fuel-prices" },
+      { title: "fueleconomy.gov (EPA): расход и тип топлива", url: "https://www.fueleconomy.gov/" },
+      { title: "ДП: средний годовой пробег по данным «Автостата»", url: "https://www.dp.ru/a/2025/05/29/edem-dalshe-v-peterburge" },
+      { title: "Auto.ru: годовой пробег пикапов и седанов", url: "https://auto.ru/mag/article/godovoy-probeg-sedanov-i-pikapov-v-rossii-okazalsya-bolshe-chem-hetchbekov-i-krossoverov/" }
+    ]
+  },
+
   // Порог 3,5 т: права, знак 3.4, пропуска
   massLimitKg: 3500
 };
+
+/** Расход л/100 км из миль на галлон (США) */
+window.mpgToL100 = (mpg) => (mpg ? Math.round((235.215 / mpg) * 10) / 10 : 0);
 
 /** Транспортный налог в год. kind: "truck" | "car" */
 window.calcTransportTax = function (hp, kind) {

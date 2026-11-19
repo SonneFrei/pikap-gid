@@ -476,6 +476,11 @@
     eurRate: $("eurRate"),
     other: $("other"),
     hp: $("hp"),
+    km: $("km"),
+    l100: $("l100"),
+    fuelSel: $("fuel"),
+    fuelPrice: $("fuelPrice"),
+    fuelHint: $("fuel-hint"),
     out: $("calc-result"),
     presetInfo: $("preset-info")
   };
@@ -500,6 +505,14 @@
     form.querySelector(`input[name="fuel"][value="${engine.fuel}"]`).checked = true;
     el.cc.value = engine.cc;
     el.hp.value = engine.hp;
+    if (engine.mpg) {
+      const F = R.fuel;
+      const fuelKey = F.gradeToFuel[engine.grade] || "ai95";
+      el.l100.value = window.mpgToL100(engine.mpg);
+      el.fuelSel.value = fuelKey;
+      el.fuelPrice.value = F.prices[fuelKey];
+      el.fuelHint.textContent = `${F.gradeNote[engine.grade] || ""} Расход по EPA: ${engine.mpg} миль/галлон ≈ ${String(window.mpgToL100(engine.mpg)).replace(".", ",")} л/100 км в смешанном цикле.`;
+    }
     el.gvwr.value = model.gvwrDefault;
     if (model.msrpFrom) el.price.value = model.msrpFrom;
     el.presetInfo.innerHTML =
@@ -509,9 +522,10 @@
   }
 
   // --- Стоимость владения: транспортный налог как у грузовика и «если бы был легковым»
-  function ownBlock(hp, total) {
+  function ownBlock(hp, total, fuel) {
     if (!hp) return "";
     const T = R.transportTax;
+    const F = R.fuel;
     const truck = window.calcTransportTax(hp, "truck");
     const car = window.calcTransportTax(hp, "car");
     const luxury = total >= T.luxuryFromRub;
@@ -519,7 +533,8 @@
     const saving = carTotal - truck.rub;
     return `
       <section class="own">
-        <h3>Сколько стоит владеть: транспортный налог</h3>
+        <h3>Сколько стоит владеть</h3>
+        <p class="own-sub">Транспортный налог</p>
         <div class="own-grid">
           <div class="own-card main">
             <small>Как пикап (грузовой), ${esc(T.region)}</small>
@@ -534,10 +549,29 @@
         </div>
         ${saving > 0 ? `<p class="own-save">Экономия статуса грузовика: <b>${rub(saving)} в год</b>${luxury ? " — коэффициент ×3 к пикапу не применяется." : "."}</p>` : ""}
         <details>
-          <summary>${statusBadge(T.status)} откуда цифры</summary>
+          <summary>${statusBadge(T.status)} откуда цифры по налогу</summary>
           <p>${esc(T.note)}</p>
           ${sourcesList(T.sources)}
         </details>
+        ${fuel && fuel.rub > 0 ? `
+          <h3 style="margin-top:16px">Топливо</h3>
+          <div class="own-grid">
+            <div class="own-card">
+              <small>${esc(fuel.label)} · ${fmt.format(fuel.km)} км в год</small>
+              <b>${rub(fuel.rub)} <span>в год</span></b>
+              <small>${String(fuel.l100).replace(".", ",")} л/100 км × ${String(fuel.price).replace(".", ",")} ₽/л</small>
+            </div>
+            <div class="own-card main">
+              <small>Налог + топливо</small>
+              <b>${rub(truck.rub + fuel.rub)} <span>в год</span></b>
+              <small>≈ ${rub((truck.rub + fuel.rub) / 12)} в месяц, без ТО, страховки и шин</small>
+            </div>
+          </div>
+          <details>
+            <summary>${statusBadge(F.status)} откуда цифры по топливу</summary>
+            <p>${esc(F.note)} Цены на ${esc(F.date)}.</p>
+            ${sourcesList(F.sources)}
+          </details>` : ""}
       </section>`;
   }
 
@@ -578,6 +612,11 @@
     const eurRate = num(el.eurRate);
     const otherRub = num(el.other);
     const hp = num(el.hp);
+    const fuelYear = {
+      km: num(el.km), l100: num(el.l100), price: num(el.fuelPrice),
+      label: R.fuel.labels[el.fuelSel.value] || ""
+    };
+    fuelYear.rub = (fuelYear.km / 100) * fuelYear.l100 * fuelYear.price;
 
     const carRub = priceUsd * usdRate;
     const deliveryRub = deliveryUsd * usdRate;
@@ -681,7 +720,7 @@
           </div>`).join("")}
       </div>
       ${alerts.join("")}
-      ${ownBlock(hp, total)}
+      ${ownBlock(hp, total, fuelYear)}
       ${leadBlock()}
       <div class="alert info">
         <b>Как считаем</b>
@@ -711,6 +750,7 @@
   // Цель для аналитики: человек сам что-то поменял в калькуляторе (один раз за визит)
   const track = () => { if (typeof window.trackGoal === "function") window.trackGoal("calc_used", true); };
 
+  el.fuelSel.addEventListener("input", () => { el.fuelPrice.value = R.fuel.prices[el.fuelSel.value] || el.fuelPrice.value; });
   el.preset.addEventListener("change", () => { applyPreset(el.preset.value); compute(); track(); });
   form.addEventListener("input", (e) => { if (e.target !== el.preset) { compute(); track(); } });
   form.addEventListener("submit", (e) => e.preventDefault());
