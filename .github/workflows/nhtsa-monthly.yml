@@ -1,0 +1,51 @@
+# Раз в месяц обновляет раздел «Болячки»: заново скачивает жалобы и отзывные кампании из NHTSA
+# и коммитит свежий assets/data/nhtsa.js. Можно запустить вручную: вкладка Actions → Run workflow.
+name: Обновление данных NHTSA
+
+on:
+  schedule:
+    - cron: "0 3 1 * *"   # 1-го числа каждого месяца, 03:00 UTC (06:00 по Москве)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: nhtsa-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Скачать свежие данные NHTSA
+        run: python3 scripts/nhtsa_fetch.py
+
+      - name: Сохранить, если что-то изменилось
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/data/nhtsa.js
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Изменений нет"
+          else
+            git commit -m "Автообновление данных NHTSA ($(date -u +%Y-%m-%d))"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Пересобрать сайт
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "Сборка запустится сама"
