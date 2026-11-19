@@ -475,6 +475,7 @@
     usdRate: $("usdRate"),
     eurRate: $("eurRate"),
     other: $("other"),
+    hp: $("hp"),
     out: $("calc-result"),
     presetInfo: $("preset-info")
   };
@@ -498,6 +499,7 @@
     const { model, engine } = found;
     form.querySelector(`input[name="fuel"][value="${engine.fuel}"]`).checked = true;
     el.cc.value = engine.cc;
+    el.hp.value = engine.hp;
     el.gvwr.value = model.gvwrDefault;
     if (model.msrpFrom) el.price.value = model.msrpFrom;
     el.presetInfo.innerHTML =
@@ -505,6 +507,65 @@
       `<b>подставьте цифру из ПТС</b>, если она известна.` +
       (model.msrpFrom ? "" : " Цену в США по этой модели уточняем — введите свою.");
   }
+
+  // --- Стоимость владения: транспортный налог как у грузовика и «если бы был легковым»
+  function ownBlock(hp, total) {
+    if (!hp) return "";
+    const T = R.transportTax;
+    const truck = window.calcTransportTax(hp, "truck");
+    const car = window.calcTransportTax(hp, "car");
+    const luxury = total >= T.luxuryFromRub;
+    const carTotal = car.rub * (luxury ? T.luxuryCoef : 1);
+    const saving = carTotal - truck.rub;
+    return `
+      <section class="own">
+        <h3>Сколько стоит владеть: транспортный налог</h3>
+        <div class="own-grid">
+          <div class="own-card main">
+            <small>Как пикап (грузовой), ${esc(T.region)}</small>
+            <b>${rub(truck.rub)} <span>в год</span></b>
+            <small>${fmt.format(hp)} л.с. × ${truck.rate} ₽</small>
+          </div>
+          <div class="own-card">
+            <small>Если бы это был легковой</small>
+            <b>${rub(carTotal)} <span>в год</span></b>
+            <small>${fmt.format(hp)} л.с. × ${car.rate} ₽${luxury ? ` × ${T.luxuryCoef} — «налог на роскошь» для легковых дороже 10 млн ₽ из перечня Минпромторга` : ""}</small>
+          </div>
+        </div>
+        ${saving > 0 ? `<p class="own-save">Экономия статуса грузовика: <b>${rub(saving)} в год</b>${luxury ? " — коэффициент ×3 к пикапу не применяется." : "."}</p>` : ""}
+        <details>
+          <summary>${statusBadge(T.status)} откуда цифры</summary>
+          <p>${esc(T.note)}</p>
+          ${sourcesList(T.sources)}
+        </details>
+      </section>`;
+  }
+
+  // --- Smoke-test: интерес к подбору у импортёров. Персональные данные не собираем.
+  let lastCalc = null;
+  function leadBlock() {
+    return `
+      <section class="lead" id="lead-box">
+        <div>
+          <h3>Хотите такую машину?</h3>
+          <p>Соберём предложения от проверенных импортёров под ваш расчёт — с реальными ценами и сроками.</p>
+        </div>
+        <button type="button" class="btn" id="lead-btn">Хочу предложения</button>
+      </section>`;
+  }
+  el.out.addEventListener("click", (e) => {
+    if (!e.target.closest("#lead-btn")) return;
+    if (typeof window.trackGoal === "function" && lastCalc) {
+      window.trackGoal("lead_click", false, lastCalc);
+    }
+    const box = document.getElementById("lead-box");
+    box.classList.add("done");
+    box.innerHTML = `
+      <div>
+        <h3>Спасибо — ваш интерес учтён</h3>
+        <p>Подбор у проверенных импортёров мы только запускаем. Такие клики показывают нам, для каких машин запускать его первым. Контакты мы не собираем — следите за обновлениями сайта.</p>
+      </div>`;
+  });
 
   function compute() {
     const fuel = el.fuel();
@@ -516,6 +577,7 @@
     const usdRate = num(el.usdRate);
     const eurRate = num(el.eurRate);
     const otherRub = num(el.other);
+    const hp = num(el.hp);
 
     const carRub = priceUsd * usdRate;
     const deliveryRub = deliveryUsd * usdRate;
@@ -554,6 +616,13 @@
     ];
 
     const total = items.reduce((s, i) => s + i.val, 0);
+    const found = window.findEngine(el.preset.value);
+    lastCalc = {
+      model: found ? `${found.model.brand} ${found.model.name}` : "Другая машина",
+      engine: found ? found.engine.name : `${fmt.format(cc)} см³`,
+      age: ageId,
+      total_rub: Math.round(total)
+    };
     const toState = duty.rub + vat + fee + util;
     const share = total > 0 ? Math.round((toState / total) * 100) : 0;
 
@@ -612,6 +681,8 @@
           </div>`).join("")}
       </div>
       ${alerts.join("")}
+      ${ownBlock(hp, total)}
+      ${leadBlock()}
       <div class="alert info">
         <b>Как считаем</b>
         Ввоз физлицом как грузового автомобиля (код ТН ВЭД 8704). Таможенная стоимость = цена машины + доставка до границы. Ставки проверены ${esc(R.updated)}. ${esc(R.util.nextChange)}

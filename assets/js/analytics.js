@@ -10,11 +10,12 @@
 
   // --- Цели (вызываются из app.js). Без счётчика — тихо ничего не делают.
   var sentGoals = {};
-  window.trackGoal = function (name, once) {
+  window.trackGoal = function (name, once, params) {
     if (!METRIKA_ID || typeof window.ym !== "function") return;
     if (once && sentGoals[name]) return;
     sentGoals[name] = true;
-    window.ym(METRIKA_ID, "reachGoal", name);
+    if (params) window.ym(METRIKA_ID, "reachGoal", name, params);
+    else window.ym(METRIKA_ID, "reachGoal", name);
   };
 
   // --- Подключение Метрики

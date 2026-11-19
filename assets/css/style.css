@@ -307,6 +307,30 @@ table.cmp .neg { color: var(--danger); }
 .mi.check .mi-icon { background: rgba(255, 204, 77, .14); color: var(--warn); }
 .mass-table { min-width: 0; }
 
+/* ---------- Калькулятор: владение и заявка ---------- */
+.own { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+.own h3 { font-size: 16px; margin-bottom: 12px; }
+.own-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.own-card { background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 14px; display: grid; gap: 4px; }
+.own-card.main { border-color: rgba(255, 138, 31, .5); }
+.own-card b { font-family: var(--font-head); font-size: 22px; font-weight: 600; }
+.own-card b span { font-family: var(--font-body); font-size: 13px; color: var(--muted); font-weight: 600; }
+.own-card small { color: var(--dim); font-size: 12px; }
+.own-save { margin: 12px 0 6px; font-size: 14px; color: var(--muted); }
+.own-save b { color: var(--ok); }
+.own details { font-size: 13px; color: var(--muted); }
+.own summary { cursor: pointer; color: var(--dim); list-style: none; display: inline-flex; gap: 6px; align-items: center; }
+.own summary::-webkit-details-marker { display: none; }
+.lead {
+  margin-top: 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  background: linear-gradient(135deg, rgba(255,138,31,.16), rgba(255,138,31,.04)); border: 1px solid rgba(255,138,31,.45);
+  border-radius: var(--radius); padding: 16px 18px;
+}
+.lead h3 { margin: 0 0 4px; font-size: 17px; }
+.lead p { margin: 0; color: var(--muted); font-size: 14px; }
+.lead .btn { flex-shrink: 0; }
+.lead.done { background: rgba(76, 195, 138, .08); border-color: rgba(76, 195, 138, .4); }
+
 /* ---------- Плашка cookie ---------- */
 .cookie-bar {
   position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 50;
@@ -338,6 +362,8 @@ table.cmp .neg { color: var(--danger); }
   section.block { padding: 40px 0; }
   .cookie-bar { flex-direction: column; align-items: stretch; text-align: left; }
   .compare-pick { grid-template-columns: 1fr; gap: 8px; }
+  .own-grid { grid-template-columns: 1fr; }
+  .lead { flex-direction: column; align-items: stretch; }
   table.cmp { min-width: 0; font-size: 13px; table-layout: fixed; }
   table.cmp th, table.cmp td { padding: 10px 8px; overflow-wrap: anywhere; }
   table.cmp thead th { font-size: 14px; }

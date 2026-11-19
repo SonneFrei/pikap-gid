@@ -87,8 +87,34 @@ window.RULES = {
     nextChange: "Ставки коммерческого утильсбора индексируются каждое 1 января: по планам, на 10% в год в 2027–2030."
   },
 
+  // Транспортный налог (ставки Москвы на 2026 год, руб. за 1 л.с. в год)
+  // [верхняя граница мощности (л.с., включительно), ставка]
+  transportTax: {
+    region: "Москва",
+    status: "ok",
+    truck: [[100, 19], [150, 32], [200, 46], [250, 65], [Infinity, 85]],
+    car: [[100, 14], [125, 31], [150, 35], [200, 50], [225, 75], [250, 75], [Infinity, 150]],
+    luxuryCoef: 3,
+    luxuryFromRub: 10000000,
+    note: "Ставки Москвы на 2026 год (закон г. Москвы № 33 в действующей редакции). Повышающий коэффициент ×3 по ст. 362 НК РФ применяется к легковым автомобилям из перечня Минпромторга (средняя стоимость от 10 млн ₽) — пикап, оформленный как грузовой, под него не попадает. В других регионах ставки свои.",
+    sources: [
+      { title: "Calcus: ставки транспортного налога в Москве 2026", url: "https://calcus.ru/transportnyj-nalog-kalkulyator/moskva" },
+      { title: "Nalog-nalog: транспортный налог в Москве в 2026 году", url: "https://nalog-nalog.ru/transportnyj_nalog/transportnyj-nalog-v-moskve-v-2026-godu/" },
+      { title: "Налог на роскошь: коэффициент 3 и перечень Минпромторга", url: "https://nalog-nalog.ru/transportnyj_nalog/raschet_transportnogo_naloga/povyshayuwij_koefficient_dlya_transportnogo_naloga/" }
+    ]
+  },
+
   // Порог 3,5 т: права, знак 3.4, пропуска
   massLimitKg: 3500
+};
+
+/** Транспортный налог в год. kind: "truck" | "car" */
+window.calcTransportTax = function (hp, kind) {
+  const scale = window.RULES.transportTax[kind];
+  for (const [limit, rate] of scale) {
+    if (hp <= limit) return { rub: hp * rate, rate };
+  }
+  return { rub: 0, rate: 0 };
 };
 
 /**
