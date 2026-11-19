@@ -17,10 +17,10 @@ window.NHTSA = {
     "RAM 1500 QUAD CAB"
    ],
    "complaints": {
-    "total": 2009,
+    "total": 2010,
     "byYear": {
      "2021": 692,
-     "2022": 645,
+     "2022": 646,
      "2023": 211,
      "2024": 79,
      "2025": 382
@@ -28,7 +28,7 @@ window.NHTSA = {
     "byComponent": [
      [
       "ELECTRICAL SYSTEM",
-      710
+      711
      ],
      [
       "ENGINE",
@@ -494,18 +494,18 @@ window.NHTSA = {
     "F-150 SUPER CREW HEV"
    ],
    "complaints": {
-    "total": 3052,
+    "total": 3055,
     "byYear": {
      "2021": 1332,
-     "2022": 827,
-     "2023": 523,
+     "2022": 828,
+     "2023": 525,
      "2024": 239,
      "2025": 131
     },
     "byComponent": [
      [
       "POWER TRAIN",
-      1007
+      1009
      ],
      [
       "ELECTRICAL SYSTEM",
@@ -517,7 +517,7 @@ window.NHTSA = {
      ],
      [
       "EXTERIOR LIGHTING",
-      291
+      292
      ],
      [
       "ENGINE",
@@ -525,7 +525,7 @@ window.NHTSA = {
      ],
      [
       "SERVICE BRAKES",
-      188
+      189
      ],
      [
       "FORWARD COLLISION AVOIDANCE",
@@ -552,7 +552,7 @@ window.NHTSA = {
       101
      ]
     ],
-    "crashes": 90,
+    "crashes": 91,
     "fires": 30,
     "injuries": 80,
     "deaths": 1
@@ -1266,18 +1266,18 @@ window.NHTSA = {
     "SILVERADO 1500"
    ],
    "complaints": {
-    "total": 2379,
+    "total": 2384,
     "byYear": {
-     "2021": 864,
-     "2022": 669,
+     "2021": 865,
+     "2022": 671,
      "2023": 404,
-     "2024": 325,
+     "2024": 327,
      "2025": 117
     },
     "byComponent": [
      [
       "ENGINE",
-      1035
+      1039
      ],
      [
       "POWER TRAIN",
@@ -1285,11 +1285,11 @@ window.NHTSA = {
      ],
      [
       "ELECTRICAL SYSTEM",
-      391
+      392
      ],
      [
       "UNKNOWN OR OTHER",
-      219
+      220
      ],
      [
       "FUEL/PROPULSION SYSTEM",
@@ -1309,7 +1309,7 @@ window.NHTSA = {
      ],
      [
       "STEERING",
-      81
+      82
      ],
      [
       "STRUCTURE",
@@ -1477,10 +1477,10 @@ window.NHTSA = {
     "SIERRA 1500"
    ],
    "complaints": {
-    "total": 2263,
+    "total": 2265,
     "byYear": {
-     "2021": 609,
-     "2022": 614,
+     "2021": 610,
+     "2022": 615,
      "2023": 522,
      "2024": 386,
      "2025": 132
@@ -1488,7 +1488,7 @@ window.NHTSA = {
     "byComponent": [
      [
       "ENGINE",
-      1051
+      1052
      ],
      [
       "POWER TRAIN",
@@ -1500,7 +1500,7 @@ window.NHTSA = {
      ],
      [
       "STRUCTURE",
-      255
+      256
      ],
      [
       "UNKNOWN OR OTHER",
