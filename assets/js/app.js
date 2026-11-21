@@ -79,6 +79,46 @@
   }
 
   /* =========================================================
+   * Главная: «пикап против легкового» — те же формулы, что в калькуляторе
+   * ========================================================= */
+  const vsN1 = document.getElementById("vs-n1");
+  if (vsN1) {
+    const R = window.RULES, P = R.passenger, SH = R.shipping;
+    const ex = window.findEngine(P.example.engineId);
+    const mln = (n, d) => (n / 1e6).toLocaleString("ru-RU", { minimumFractionDigits: d, maximumFractionDigits: d });
+    const renderVs = (usdRate, eurRate, date) => {
+      const { model, engine } = ex;
+      const deliveryUsd = SH.slotRateUsd * SH.pickupSlots;
+      const cv = (model.msrpFrom + deliveryUsd) * usdRate;
+      // Пикап (N1): пошлина, НДС, таможенный сбор, грузовой утильсбор
+      const duty = window.calcDuty(engine.fuel, engine.cc, "new", cv, eurRate);
+      const vat = (cv + duty.rub) * R.vat.rate;
+      const fee = window.calcCustomsFee(cv);
+      const utilN1 = window.utilRow(model.gvwrDefault).new;
+      const n1 = duty.rub + vat + fee + utilN1;
+      // Легковой, ввезённый физлицом для себя: ЕТС + сбор + утильсбор по мощности
+      const ets = window.calcPassengerETS(cv, eurRate, engine.cc);
+      const utilM1 = P.utilBase * P.example.utilCoefNew;
+      const m1 = ets.rub + P.feeRub + utilM1;
+      const diff = m1 - n1;
+      vsN1.textContent = `≈ ${mln(n1, 2)} млн`;
+      document.getElementById("vs-m1").textContent = `≈ ${mln(m1, 2)} млн`;
+      document.getElementById("vs-diff").textContent = `≈ ${mln(diff, 1)} млн ₽`;
+      const sN1 = document.getElementById("stat-n1"), sD = document.getElementById("stat-diff");
+      if (sN1) sN1.textContent = `≈ ${mln(n1, 1)} млн ₽`;
+      if (sD) sD.textContent = `≈ ${mln(diff, 1)} млн ₽`;
+      document.getElementById("vs-note").innerHTML = `
+        <p>Новый ${esc(model.brand + " " + model.name)} с ${esc(engine.name)} (${engine.hp} л.с., ${fmt.format(engine.cc)} см³), стартовая версия за ${usd(model.msrpFrom)} + доставка ${usd(deliveryUsd)}, курс ${date ? `ЦБ РФ на ${esc(date)}` : "по умолчанию"}: $ — ${String(usdRate).replace(".", ",")} ₽, € — ${String(eurRate).replace(".", ",")} ₽. Считаем только платежи государству, без цены машины.</p>
+        <p><b>Как пикап (грузовой N1), ${rub(n1)}:</b> пошлина ${esc(duty.label)} — ${rub(duty.rub)}, НДС 22% — ${rub(vat)}, таможенный сбор — ${rub(fee)}, утильсбор — ${rub(utilN1)}.</p>
+        <p><b>Если бы был легковым и ввезён для себя, ${rub(m1)}:</b> единая ставка ${Math.round(ets.pct * 100)}%, но не меньше €${String(ets.minEurCc).replace(".", ",")} за см³${ets.byMin ? " — здесь срабатывает минимум" : ""} — ${rub(ets.rub)} (НДС и акциз внутри неё), сбор — ${rub(P.feeRub)}, утильсбор — ${rub(utilM1)}: льгота для физлиц только до 160 л.с.</p>
+        <p class="dim">${esc(P.note)}</p>
+        ${sourcesList(P.sources.concat(R.duty.sources.slice(0, 1), R.util.sources.slice(0, 1)))}`;
+    };
+    renderVs(82, 90, null);
+    window.loadCbrRates().then((r) => { if (r) renderVs(r.usd, r.eur, r.date); });
+  }
+
+  /* =========================================================
    * Болячки (данные NHTSA)
    * ========================================================= */
   const issuesRoot = document.getElementById("issues-root");

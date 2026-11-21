@@ -398,3 +398,10 @@ table.cmp .neg { color: var(--danger); }
   .age-table { font-size: 12px; }
   .age-table th, .age-table td { padding: 5px 3px; }
 }
+
+/* Главная: «как посчитано» под сравнением пикап / легковой */
+.teaser .vs details.vs-how { font-size: 13px; color: var(--muted); }
+.teaser .vs details.vs-how > summary { cursor: pointer; font-weight: 700; color: var(--accent-2); }
+.teaser .vs details.vs-how div { display: block; background: none; border: 0; padding: 6px 0 0; }
+.teaser .vs details.vs-how p { margin: 0 0 8px; line-height: 1.5; }
+.teaser .vs details.vs-how ul { margin: 0; padding-left: 18px; }

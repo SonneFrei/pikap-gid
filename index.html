@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=20261121b">
+  <link rel="stylesheet" href="assets/css/style.css?v=20261121c">
 </head>
 <body>
   <header class="site-header">
@@ -43,17 +43,18 @@
       <div class="wrap">
         <div class="eyebrow">Американские пикапы в России</div>
         <h1>Пикап из США — <span class="accent">без тумана</span></h1>
-        <p class="lead">Сравниваем RAM, Ford, Chevrolet и GMC, переводим конфигураторы на человеческий, считаем реальную цену в России и подсказываем, где обслуживать. Каждая цифра — с источником.</p>
+        <p class="lead">Сравниваем RAM, Ford, Chevrolet и GMC, считаем полную цену в России и показываем, что у них ломается, — по данным американского регулятора. Каждая цифра — с источником.</p>
         <div class="actions">
           <a class="btn" href="calculator.html">Посчитать стоимость в России</a>
           <a class="btn ghost" href="models.html">Смотреть модели</a>
         </div>
 
         <div class="stats">
-          <div class="stat"><b>№1</b><span>RAM 1500 — лидер рынка новых пикапов России по итогам февраля 2026</span></div>
-          <div class="stat"><b>9,7–13,4 млн ₽</b><span>за новый RAM 1500 у продавцов в Москве</span></div>
-          <div class="stat"><b>≈ 3 млн ₽</b><span>разница в платежах: RAM 1500 как пикап против легкового аналога</span></div>
+          <div class="stat"><b>№1</b><span>RAM 1500 впервые возглавил рынок новых пикапов России в феврале 2026</span></div>
+          <div class="stat"><b id="stat-n1">≈ 2,4 млн ₽</b><span>платежи государству за новый RAM 1500 5.7 V8 как за пикап</span></div>
+          <div class="stat"><b id="stat-diff">≈ 4,4 млн ₽</b><span>столько сверху заплатили бы за тот же RAM 1500, будь он легковым</span></div>
         </div>
+        <p class="dim" style="font-size:12px;margin:10px 0 0">Продажи — «Автостат» по данным <a href="https://www.autonews.ru/news/69c54b539a79471b34c8bcb0" target="_blank" rel="noopener">Autonews</a>. Платежи — наш расчёт по действующим ставкам, как он устроен — ниже.</p>
         <p class="name-note"><span class="logo-mark" aria-hidden="true">½</span><span>Почему «Полтонны»? В США RAM 1500, Ford F-150 и Chevrolet Silverado 1500 называют полутонными пикапами — half-ton. Это и есть наши герои.</span></p>
       </div>
     </section>
@@ -71,10 +72,17 @@
             </div>
           </div>
           <div class="vs">
-            <div class="big">≈ 3 млн ₽</div>
-            <div><span>RAM 1500 как грузовой (N1)</span><b>≈ 5,5 млн</b></div>
-            <div><span>Как легковой аналог</span><b>≈ 8,4 млн</b></div>
-            <p class="dim" style="font-size:12px;margin:0">Доплаты сверх цены машины, по оценке <a href="https://www.mentoday.ru/technics/news/03-01-2026/lazeika-na-milliony-pochemu-rossiyane-nachali-peresajivatsya-na-pikapy/" target="_blank" rel="noopener">MenToday</a>, январь 2026.</p>
+            <div class="big" id="vs-diff">≈ 4,4 млн ₽</div>
+            <div><span>RAM 1500 как пикап (грузовой N1)</span><b id="vs-n1">≈ 2,41 млн</b></div>
+            <div><span>Тот же RAM 1500, если бы был легковым</span><b id="vs-m1">≈ 6,80 млн</b></div>
+            <details class="vs-how">
+              <summary>Как посчитано</summary>
+              <div id="vs-note">
+                <p>Новый RAM 1500 с V8 5.7 HEMI (395 л.с.), Tradesman за $40 275 + доставка $5 600, курс ЦБ на 21.11.2026. Считаем только платежи государству, без цены машины.</p>
+                <p><b>Пикап:</b> пошлина 12,5%, НДС 22%, таможенный сбор, утильсбор 990 000 ₽ (грузовой до 3,5 т).</p>
+                <p><b>Легковой, ввезённый для себя:</b> единая ставка 48%, но не меньше €5,5 за см³ (НДС и акциз внутри), утильсбор 3 993 600 ₽ — льгота для физлиц только до 160 л.с.</p>
+              </div>
+            </details>
           </div>
         </div>
       </div>
@@ -144,6 +152,9 @@
     </div>
   </footer>
 
-  <script src="assets/js/analytics.js?v=20261121b"></script>
+  <script src="assets/js/analytics.js?v=20261121c"></script>
+  <script src="assets/js/rules.js?v=20261121c"></script>
+  <script src="assets/js/models.js?v=20261121c"></script>
+  <script src="assets/js/app.js?v=20261121c"></script>
 </body>
 </html>
