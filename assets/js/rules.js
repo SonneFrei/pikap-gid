@@ -17,8 +17,7 @@ window.RULES = {
     status: "ok",
     note: "Основная ставка НДС — 22% с 1 января 2026 года (Федеральный закон от 28.11.2025 № 425-ФЗ). При ввозе считается от таможенной стоимости плюс пошлина.",
     sources: [
-      { title: "ФНС: с 1 января 2026 года ставка НДС составляет 22%", url: "https://www.nalog.gov.ru/rn26/news/smi/16596761/" },
-      { title: "РБК Компании: НДС при импорте в 2026 году", url: "https://companies.rbc.ru/news/PSOwQt2nr9/nds-pri-importe-iz-kitaya-v-2026-godu/" }
+      { title: "ФНС: с 1 января 2026 года ставка НДС составляет 22%", url: "https://www.nalog.gov.ru/rn26/news/smi/16596761/" }
     ]
   },
 
@@ -81,7 +80,6 @@ window.RULES = {
     ],
     sources: [
       { title: "Logisline: утилизационный сбор в 2026 году (таблица)", url: "https://logisline.ru/information/utilizatsionnyy-sbor-v-2026-godu/" },
-      { title: "Sferacar: утильсбор на пикап в 2026", url: "https://sferacar.ru/stati/utilizacionnyj-sbor-dlya-pikapov.html" },
       { title: "Drom: невысокий утильсбор на пикапы", url: "https://www.drom.ru/info/misc/103545.html" }
     ],
     nextChange: "Ставки коммерческого утильсбора индексируются каждое 1 января: по планам, на 10% в год в 2027–2030."
