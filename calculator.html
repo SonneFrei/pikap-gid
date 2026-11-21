@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=20261120e">
+  <link rel="stylesheet" href="assets/css/style.css?v=20261121a">
 </head>
 <body>
   <header class="site-header">
@@ -91,16 +91,26 @@
         </div>
 
         <h2>Деньги</h2>
+        <div class="field">
+          <label for="price" id="price-label">Цена в США, $</label>
+          <input id="price" inputmode="numeric" value="40275">
+          <span class="hint" id="price-hint">Стартовая цена новой машины. Для б/у поставьте цену из объявления.</span>
+        </div>
         <div class="field-row">
           <div class="field">
-            <label for="price">Цена в США, $</label>
-            <input id="price" inputmode="numeric" value="40275">
+            <label for="delivery">Доставка за 1 место, $</label>
+            <input id="delivery" inputmode="numeric" value="2800">
           </div>
           <div class="field">
-            <label for="delivery">Доставка до РФ, $</label>
-            <input id="delivery" inputmode="numeric" value="5000">
+            <label>Мест в контейнере</label>
+            <div class="seg three">
+              <input type="radio" name="slots" id="slots-1" value="1"><label for="slots-1">1</label>
+              <input type="radio" name="slots" id="slots-2" value="2" checked><label for="slots-2">2</label>
+              <input type="radio" name="slots" id="slots-4" value="4"><label for="slots-4" title="Весь 40-футовый контейнер">4</label>
+            </div>
           </div>
         </div>
+        <p class="hint dim" id="ship-hint" style="margin:-6px 0 14px;font-size:12px">В 40-футовый контейнер входит 4 легковых или 2 полноразмерных пикапа, поэтому пикап занимает два места.</p>
         <div class="field-row">
           <div class="field">
             <label for="usdRate">Курс доллара, ₽</label>
@@ -144,7 +154,7 @@
           </div>
         </div>
         <p class="hint dim" id="fuel-hint" style="margin:-6px 0 18px;font-size:12px"></p>
-        <p class="assume">Доставка, курсы и прочие расходы — примерные допущения. Морская доставка из США стоит примерно $2 800–5 000 (Ro-Ro дешевле контейнера), но маршруты в Россию идут через третьи страны, и ставки меняются почти каждую неделю. Поставьте курс ЦБ на сегодня и цифры от импортёра.</p>
+        <p class="assume">Доставка, курсы и прочие расходы — примерные допущения. Морская доставка легковой из США стоит примерно $2 800–5 000, пикап в контейнере занимает два места. Маршруты в Россию идут через третьи страны, и ставки меняются почти каждую неделю. Поставьте курс ЦБ на сегодня и цифры от импортёра.</p>
       </form>
 
       <section class="panel" id="calc-result" aria-live="polite"></section>
@@ -158,9 +168,9 @@
     </div>
   </footer>
 
-  <script src="assets/js/analytics.js?v=20261120e"></script>
-  <script src="assets/js/rules.js?v=20261120e"></script>
-  <script src="assets/js/models.js?v=20261120e"></script>
-  <script src="assets/js/app.js?v=20261120e"></script>
+  <script src="assets/js/analytics.js?v=20261121a"></script>
+  <script src="assets/js/rules.js?v=20261121a"></script>
+  <script src="assets/js/models.js?v=20261121a"></script>
+  <script src="assets/js/app.js?v=20261121a"></script>
 </body>
 </html>

@@ -99,6 +99,18 @@ p { margin: 0 0 1em; }
 .badge.soon { background: rgba(255, 138, 31, .12); color: var(--accent-2); }
 .badge.check { background: rgba(255, 204, 77, .12); color: var(--warn); }
 .badge.ok { background: rgba(76, 195, 138, .12); color: var(--ok); }
+/* «проверить» — раскрывается по клику и объясняет, что именно сверяем */
+details.chk { display: inline; }
+details.chk[open] { display: block; margin-top: 4px; }
+details.chk > summary { display: inline-block; list-style: none; cursor: pointer; }
+details.chk > summary::-webkit-details-marker { display: none; }
+details.chk > summary::after { content: " ▾"; }
+details.chk[open] > summary::after { content: " ▴"; }
+details.chk .chk-note { display: block; margin-top: 6px; font-size: 12.5px; line-height: 1.45; color: var(--muted); font-weight: 400; text-align: left; }
+.age-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 8px; }
+.age-table th, .age-table td { padding: 6px 8px; border-bottom: 1px solid var(--line, rgba(255,255,255,.08)); text-align: right; }
+.age-table th:first-child, .age-table td:first-child { text-align: left; }
+.age-table tr.cur td { color: var(--accent-2); font-weight: 700; }
 
 /* ---------- Главная ---------- */
 .hero { padding: 72px 0 48px; position: relative; overflow: hidden; }
@@ -179,6 +191,7 @@ input, select {
 input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
 .seg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; position: relative; }
 .seg.two { grid-template-columns: repeat(2, 1fr); }
+.seg.three { grid-template-columns: repeat(3, 1fr); }
 .seg.five { grid-template-columns: repeat(6, 1fr); }
 .seg.five label { grid-column: span 2; }
 .seg.five label:nth-of-type(n+4) { grid-column: span 3; }
@@ -359,7 +372,7 @@ table.cmp .neg { color: var(--danger); }
   .hero { padding: 44px 0 32px; }
   .stats { grid-template-columns: 1fr; }
   .grid.cols-3, .grid.cols-2, .models-grid { grid-template-columns: 1fr; }
-  .seg:not(.five) { grid-template-columns: 1fr 1fr; }
+  .seg:not(.five):not(.three) { grid-template-columns: 1fr 1fr; }
   section.block { padding: 40px 0; }
   .cookie-bar { flex-direction: column; align-items: stretch; text-align: left; }
   .compare-pick { grid-template-columns: 1fr; gap: 8px; }

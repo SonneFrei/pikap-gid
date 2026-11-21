@@ -129,6 +129,20 @@ window.RULES = {
     ]
   },
 
+  // Морская доставка в контейнере: цена = ставка за одно «легковое» место × сколько мест занимает машина.
+  shipping: {
+    status: "check",
+    slotRateUsd: 2800,      // оценка за одно место; реальные ставки — только у импортёра
+    pickupSlots: 2,         // полноразмерный пикап длиной ~5,9 м
+    containerSlots: 4,      // столько легковых входит в 40-футовый контейнер
+    note: "В 40-футовый контейнер входит до 4 легковых машин среднего класса. Полноразмерный пикап длиной около 5,9 м занимает место двух: в контейнер их встаёт два, один за другим. Поэтому платить приходится за два места. Ставку за место — около $2 800, это нижняя граница цены доставки легковой из США — мы взяли как ориентир: маршруты в Россию идут через третьи страны, ставки меняются почти каждую неделю. Ro-Ro (своим ходом на судне) считается по объёму, и пикап там тоже дороже седана.",
+    sources: [
+      { title: "SeaRates: сколько автомобилей помещается в контейнер", url: "https://www.searates.com/ru/blog/post/skolko-mashin-pomeshchaetsya-v-konteinere" },
+      { title: "DHL: размеры морских контейнеров", url: "https://www.dhl.com/us-en/home/global-forwarding/freight-forwarding-education-center/cargo-container-sizes-and-types.html" },
+      { title: "Ford: длина F-150 SuperCrew — 232 дюйма ≈ 5,9 м (PDF)", url: "https://www.fromtheroad.ford.com/content/dam/fordmediasite/us/en/library/2026/specs/2026_Ford_F150_Specs.pdf" }
+    ]
+  },
+
   // Порог 3,5 т: права, знак 3.4, пропуска
   massLimitKg: 3500
 };

@@ -31,6 +31,10 @@
       ? '<span class="badge ok">проверено</span>'
       : '<span class="badge check">нужна сверка</span>';
 
+  // Пометка «проверить»: раскрывается по клику и показывает, что именно сверяем
+  const checkBadge = (note) =>
+    `<details class="chk"><summary class="badge check">проверить</summary><span class="chk-note">${esc(note || "Источники расходятся — сверяем.")}</span></details>`;
+
   const sourcesList = (sources) =>
     sources && sources.length
       ? "<ul>" + sources.map((s) => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a></li>`).join("") + "</ul>"
@@ -54,9 +58,9 @@
           </div>
           <p class="tagline">${esc(m.tagline)}</p>
           <div class="specs">
-            <div class="spec"><small>Цена в США от</small><b>${m.msrpFrom ? usd(m.msrpFrom) : "уточняем"}</b> ${m.msrpCheck ? '<span class="badge check">проверить</span>' : ""}</div>
+            <div class="spec"><small>Цена в США от</small><b>${m.msrpFrom ? usd(m.msrpFrom) : "уточняем"}</b> ${m.msrpCheck ? checkBadge(m.msrpNote) : ""}</div>
             <div class="spec"><small>Мощность</small><b>${hpRange} л.с.</b></div>
-            <div class="spec"><small>Полная масса (РММ)</small><b>${gvwr} кг</b> ${m.gvwrCheck ? '<span class="badge check">проверить</span>' : ""}</div>
+            <div class="spec"><small>Полная масса (РММ)</small><b>${gvwr} кг</b> ${m.gvwrCheck ? checkBadge(m.gvwrNote) : ""}</div>
             <div class="spec"><small>Порог 3,5 т</small><b>${crosses ? "может перейти ⚠️" : "в пределах"}</b></div>
           </div>
           <ul class="engines">
@@ -216,7 +220,8 @@
       { label: "RAM 1500 (тяжёлая версия)", kg: 3400 },
       { label: "TRX — ПТС №1", kg: 3300 },
       { label: "TRX — ПТС №2", kg: 3538 },
-      { label: "SRT TRX 2027 (оценка)", kg: 3600 },
+      { label: "Raptor R (по дилерам)", kg: 3402 },
+      { label: "SRT TRX 2027 (данные Ram)", kg: 3538 },
       { label: "RAM 2500 (оценка)", kg: 4300 }
     ];
     const presetBox = document.getElementById("mass-presets");
@@ -287,7 +292,8 @@
   const compareRoot = document.getElementById("compare-root");
   if (compareRoot) {
     const R = window.RULES;
-    const DEF = { deliveryUsd: 5000, usdRate: 82, eurRate: 90, otherRub: 200000 };
+    const SH = R.shipping;
+    const DEF = { deliveryUsd: SH.slotRateUsd * SH.pickupSlots, usdRate: 82, eurRate: 90, otherRub: 200000 };
     const NHTSA_OF = {
       "ram-1500": "ram-1500", "ram-trx": "ram-trx", "ram-srt-trx": "ram-trx",
       "ford-f150": "ford-f150", "ford-raptor": "ford-raptor", "ford-raptor-r": "ford-raptor",
@@ -299,7 +305,7 @@
         points: [
           "F-150 дешевле на старте ($37 290 против $40 275) и даёт больше выбора моторов — от V6 2.7 до гибрида PowerBoost.",
           "Нюанс растаможки: у F-150 2.7 объём меньше 2 800 см³, поэтому пошлина для новой машины — 15%, а у V6 3.5 и V8 — 12,5%. Меньший мотор растаможить дороже в процентах. У RAM все моторы больше 2,8 л — везде 12,5%.",
-          "RAM в 2026 году вернул HEMI V8 5.7 и предлагает рядную «шестёрку» Hurricane до 540 л.с. — это самый мощный мотор в паре (у обычного F-150 максимум 430 л.с., без учёта Raptor).",
+          "RAM в 2026 году вернул HEMI V8 5.7 (с 2027 модельного года — постепенно без гибридной системы eTorque) и предлагает рядную «шестёрку» Hurricane до 540 л.с. — это самый мощный мотор в паре (у обычного F-150 максимум 430 л.с., без учёта Raptor).",
           "Обе модели по полной массе в пределах 3,5 т: права категории B, грузовой утильсбор.",
           "Отзывных кампаний у F-150 почти вдвое больше (57 против 30), но и продаётся он в разы больше — это не прямое сравнение надёжности. Что именно отзывали — во вкладке «Болячки»."
         ]
@@ -308,8 +314,9 @@
         a: "ram-srt-trx", b: "ford-raptor-r", title: "SRT TRX vs Raptor R",
         points: [
           "777 против 720 л.с. и $99 995 против $110 930 — на бумаге новый TRX и мощнее, и дешевле.",
-          "Но главный вопрос для России — масса. У Raptor полная масса 3 334 кг, Raptor R построен на той же базе (официальной цифры нет — сверяйте по ПТС). Новый TRX, по оценке, тяжелее 3,5 т — а это права категории C, запрет проезда под знак 3.4 и утильсбор по другой строке.",
+          "Но главный вопрос для России — масса. У Raptor R в карточках дилеров Ford — 7 500 lb ≈ 3 402 кг: в пределах 3,5 т, но запас около 100 кг (в спецификации Ford цифры нет — сверяйте по ПТС). У нового TRX Ram указывает 7 800 lb ≈ 3 538 кг — больше 3,5 т: права категории C1, запрет проезда под знак 3.4 и утильсбор по другой строке.",
           "Поэтому до покупки проверьте строку «Разрешённая максимальная масса» в ПТС: для этой пары она важнее, чем 57 л.с. разницы.",
+          "Обе машины широкие — около 2,2 м без зеркал при ширине контейнера изнутри примерно 2,35 м. Место в контейнере они занимают как два легковых автомобиля, а некоторые перевозчики считают их за весь контейнер.",
           "Отдельной статистики жалоб ни по TRX, ни по Raptor NHTSA не ведёт — смотрите общие данные RAM 1500 и F-150 во вкладке «Болячки»."
         ]
       },
@@ -394,7 +401,7 @@
       const massCell = (m) => {
         const mg = margin(m);
         const range = m.gvwrKg[0] === m.gvwrKg[1] ? fmt.format(m.gvwrKg[0]) : `${fmt.format(m.gvwrKg[0])}–${fmt.format(m.gvwrKg[1])}`;
-        return `${range} кг${m.gvwrCheck ? ' <span class="badge check">проверить</span>' : ""}<br><small>${mg >= 0 ? `запас до 3,5 т: ${fmt.format(mg)} кг` : `<span class="neg">может превышать 3,5 т на ${fmt.format(-mg)} кг</span>`}</small>`;
+        return `${range} кг${m.gvwrCheck ? " " + checkBadge(m.gvwrNote) : ""}<br><small>${mg >= 0 ? `запас до 3,5 т: ${fmt.format(mg)} кг` : `<span class="neg">может превышать 3,5 т на ${fmt.format(-mg)} кг</span>`}</small>`;
       };
       const license = (m) => m.gvwrKg[1] > R.massLimitKg
         ? (m.gvwrKg[0] > R.massLimitKg ? "C" : "B или C — смотрите РММ в ПТС")
@@ -439,7 +446,7 @@
           </table>
         </div>
         <p class="dim" style="font-size:13px;margin:10px 0 0">
-          Подсвечено, кто выигрывает по строке. «Под ключ» — по нашим допущениям: доставка $${fmt.format(DEF.deliveryUsd)}, курс ${String(DEF.usdRate).replace(".", ",")} ₽/$${DEF.rateDate ? ` (ЦБ РФ на ${DEF.rateDate})` : ""}, прочие расходы ${fmt.format(DEF.otherRub)} ₽.
+          Подсвечено, кто выигрывает по строке. «Под ключ» — по нашим допущениям: доставка $${fmt.format(DEF.deliveryUsd)} (пикап занимает ${SH.pickupSlots} места в контейнере по $${fmt.format(SH.slotRateUsd)}), курс ${String(DEF.usdRate).replace(".", ",")} ₽/$${DEF.rateDate ? ` (ЦБ РФ на ${DEF.rateDate})` : ""}, прочие расходы ${fmt.format(DEF.otherRub)} ₽.
           Свою конфигурацию посчитайте в <a href="calculator.html">калькуляторе</a>.
         </p>
 
@@ -500,6 +507,10 @@
     gvwr: $("gvwr"),
     price: $("price"),
     delivery: $("delivery"),
+    slots: () => +form.querySelector('input[name="slots"]:checked').value,
+    shipHint: $("ship-hint"),
+    priceLabel: $("price-label"),
+    priceHint: $("price-hint"),
     usdRate: $("usdRate"),
     eurRate: $("eurRate"),
     other: $("other"),
@@ -526,6 +537,7 @@
     return isFinite(v) && v >= 0 ? v : 0;
   };
 
+  let priceTouched = false; // человек сам вписал цену (например, из объявления о б/у)
   function applyPreset(engineId) {
     const found = window.findEngine(engineId);
     if (!found) { el.presetInfo.textContent = "Введите параметры машины вручную."; return; }
@@ -542,7 +554,11 @@
       el.fuelHint.textContent = `${F.gradeNote[engine.grade] || ""} Расход по EPA: ${engine.mpg} миль/галлон ≈ ${String(window.mpgToL100(engine.mpg)).replace(".", ",")} л/100 км в смешанном цикле.`;
     }
     el.gvwr.value = model.gvwrDefault;
-    if (model.msrpFrom) el.price.value = model.msrpFrom;
+    el.price.value = model.msrpFrom || "";
+    priceTouched = false;
+    const SH = R.shipping;
+    el.shipHint.textContent = `В 40-футовый контейнер входит ${SH.containerSlots} легковых или 2 полноразмерных пикапа — поэтому ${model.brand} ${model.name} занимает ${SH.pickupSlots} места.` +
+      (model.wide ? ` Широкий кузов. ${model.widthNote} Внутри контейнера около 2,35 м — запас по бокам считаные сантиметры, часть перевозчиков берёт за такой пикап как за весь контейнер (4 места).` : "");
     el.presetInfo.innerHTML =
       `${esc(engine.hp)} л.с., ${fmt.format(engine.cc)} см³. Полная масса у этой модели: ${fmt.format(model.gvwrKg[0])}–${fmt.format(model.gvwrKg[1])} кг — ` +
       `<b>подставьте цифру из ПТС</b>, если она известна.` +
@@ -635,7 +651,9 @@
     const cc = num(el.cc);
     const gvwr = num(el.gvwr);
     const priceUsd = num(el.price);
-    const deliveryUsd = num(el.delivery);
+    const slotUsd = num(el.delivery);
+    const slots = el.slots();
+    const deliveryUsd = slotUsd * slots;
     const usdRate = num(el.usdRate);
     const eurRate = num(el.eurRate);
     const otherRub = num(el.other);
@@ -660,7 +678,11 @@
 
     const items = [
       { key: "car", color: "var(--c-car)", name: "Машина в США", sub: `${usd(priceUsd)} × ${fmt.format(usdRate)} ₽`, val: carRub },
-      { key: "delivery", color: "var(--c-delivery)", name: "Доставка до границы РФ", sub: `${usd(deliveryUsd)} — оценка, уточните у импортёра`, val: deliveryRub },
+      {
+        key: "delivery", color: "var(--c-delivery)", name: "Доставка до границы РФ",
+        sub: `${slots} ${slots === 1 ? "место" : "места"} в контейнере × ${usd(slotUsd)} = ${usd(deliveryUsd)} — оценка, уточните у импортёра`,
+        val: deliveryRub, status: R.shipping.status, note: R.shipping.note, sources: R.shipping.sources
+      },
       {
         key: "duty", color: "var(--c-duty)", name: "Ввозная пошлина",
         sub: duty.label.includes("€") ? duty.label : `${duty.label} от таможенной стоимости (${age.used ? "б/у" : "новая"}, ${fuel === "diesel" ? "дизель" : "бензин"}, ${fmt.format(cc)} см³)`,
@@ -693,8 +715,22 @@
     const toState = duty.rub + vat + fee + util;
     const share = total > 0 ? Math.round((toState / total) * 100) : 0;
 
+    // Возраст: цена из пресета — это цена новой машины
+    const used = ageId !== "new";
+    el.priceLabel.textContent = used ? "Цена б/у в США (из объявления), $" : "Цена в США, $";
+    el.priceHint.textContent = used
+      ? "Возраст меняет пошлину и утильсбор, а цену машины калькулятор не угадывает — впишите цену конкретного объявления."
+      : "Стартовая цена новой машины. Для б/у поставьте цену из объявления.";
+
     // Предупреждения
     const alerts = [];
+    if (used && !priceTouched && found && found.model.msrpFrom && priceUsd === found.model.msrpFrom) {
+      alerts.push(`
+        <div class="alert warn">
+          <b>В расчёте цена новой машины</b>
+          ${usd(priceUsd)} — стартовая цена новой ${esc(found.model.brand + " " + found.model.name)} в США. Б/у стоит меньше, а с ней меньше и пошлина с НДС. Впишите цену из объявления в поле «Цена б/у в США» — итог пересчитается.
+        </div>`);
+    }
     if (gvwr > R.massLimitKg) {
       alerts.push(`
         <div class="alert danger">
@@ -717,9 +753,31 @@
     if (gvwr > 5000) {
       alerts.push(`<div class="alert warn"><b>Больше 5 т — вне этого калькулятора</b>Для таких машин действуют другие ставки.</div>`);
     }
+    if (!priceUsd) {
+      alerts.unshift(`<div class="alert warn"><b>Впишите цену машины</b>Новых машин этой модели в продаже нет — поставьте в поле «Цена б/у в США» цену из объявления, иначе итог посчитан без самой машины.</div>`);
+    }
     if (gvwr > 0 && gvwr < 2000) {
       alerts.push(`<div class="alert warn"><b>Проверьте полную массу</b>У полноразмерных американских пикапов она обычно от 2 700 до 3 600 кг.</div>`);
     }
+
+    // Что меняет возраст при той же цене машины
+    const ageRows = window.AGE_GROUPS.map((a) => {
+      const d = window.calcDuty(fuel, cc, a.id, customsValue, eurRate);
+      const v = (customsValue + d.rub) * R.vat.rate;
+      const u = a.utilNew ? row.new : row.old;
+      return { a, duty: d, state: d.rub + v + fee + u, util: u };
+    });
+    const ageTable = `
+      <details class="age-box">
+        <summary>Как возраст меняет платежи государству при этой цене</summary>
+        <table class="age-table">
+          <thead><tr><th>Возраст</th><th>Пошлина</th><th>Утильсбор</th><th>Всего государству</th></tr></thead>
+          <tbody>
+            ${ageRows.map((r) => `<tr class="${r.a.id === ageId ? "cur" : ""}"><td>${esc(r.a.label)}</td><td>${esc(r.duty.label)}</td><td>${rub(r.util)}</td><td>${rub(r.state)}</td></tr>`).join("")}
+          </tbody>
+        </table>
+        <p class="dim" style="font-size:12.5px;margin:8px 0 0">Для пикапа 3–5 и 5–7 лет считаются одинаково: пошлина та же, утильсбор как у машин старше 3 лет. Скачки — на границе «до 3 лет» (утильсбор) и после 7 лет (пошлина за см³). Цену машины поменяйте сами: б/у дешевле — меньше пошлина и НДС.</p>
+      </details>`;
 
     el.out.innerHTML = `
       <div class="result-total">
@@ -747,6 +805,7 @@
               </details>` : ""}
           </div>`).join("")}
       </div>
+      ${ageTable}
       ${alerts.join("")}
       ${ownBlock(hp, total, fuelYear)}
       ${leadBlock()}
@@ -758,7 +817,7 @@
 
     // Сохраняем выбор в адресе, чтобы расчётом можно было поделиться
     const params = new URLSearchParams({
-      engine: el.preset.value, age: ageId, price: priceUsd, gvwr: gvwr
+      engine: el.preset.value, age: ageId, price: priceUsd, gvwr: gvwr, slots: slots
     });
     history.replaceState(null, "", "?" + params.toString());
   }
@@ -772,7 +831,14 @@
   if (qs.get("age") && form.querySelector(`input[name="age"][value="${CSS.escape(qs.get("age"))}"]`)) {
     form.querySelector(`input[name="age"][value="${CSS.escape(qs.get("age"))}"]`).checked = true;
   }
-  if (qs.get("price") && +qs.get("price") > 0) el.price.value = qs.get("price");
+  if (qs.get("price") && +qs.get("price") > 0) {
+    el.price.value = qs.get("price");
+    const f = window.findEngine(startEngine);
+    if (!f || +qs.get("price") !== f.model.msrpFrom) priceTouched = true;
+  }
+  if (qs.get("slots") && form.querySelector(`input[name="slots"][value="${CSS.escape(qs.get("slots"))}"]`)) {
+    form.querySelector(`input[name="slots"][value="${CSS.escape(qs.get("slots"))}"]`).checked = true;
+  }
   if (qs.get("gvwr") && +qs.get("gvwr") > 0) el.gvwr.value = qs.get("gvwr");
 
   // Цель для аналитики: человек сам что-то поменял в калькуляторе (один раз за визит)
@@ -794,6 +860,7 @@
 
   el.fuelSel.addEventListener("input", () => { el.fuelPrice.value = R.fuel.prices[el.fuelSel.value] || el.fuelPrice.value; });
   el.preset.addEventListener("change", () => { applyPreset(el.preset.value); compute(); track(); });
+  el.price.addEventListener("input", () => { priceTouched = true; });
   form.addEventListener("input", (e) => { if (e.target !== el.preset) { compute(); track(); } });
   form.addEventListener("submit", (e) => e.preventDefault());
   compute();
