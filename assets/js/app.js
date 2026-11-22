@@ -443,6 +443,75 @@
   }
 
   /* =========================================================
+   * Разбор «RAM 1500: какие пакеты брать»: выбор версии
+   * ========================================================= */
+  const trimPicker = document.getElementById("trim-picker");
+  if (trimPicker && window.RAM_TRIMS) {
+    const view = document.getElementById("trim-view");
+    const TRIMS = [...window.RAM_TRIMS].sort((a, b) => a.price - b.price);
+    const usd = (n) => "$" + fmt.format(n);
+    const GROUP_BADGE = { take: "ok", want: "check", task: "soon", skip: "danger" };
+
+    trimPicker.innerHTML = TRIMS.map((t) => `
+      <button type="button" class="rubric" data-id="${t.id}" aria-pressed="false">
+        <b>${esc(t.name)}</b><small>от ${usd(t.price)}</small>
+      </button>`).join("");
+
+    const pkgCard = (p, group) => `
+      <article class="pkg">
+        <div class="pkg-head"><h3>${esc(p.name)}</h3><span class="badge ${GROUP_BADGE[group.id]}">${esc(group.name.toLowerCase())}</span></div>
+        ${p.only ? `<p class="pkg-where">${esc(p.only)}</p>` : ""}
+        <p>${esc(p.what)}</p>
+        <p class="pkg-why">${esc(p.why)}</p>
+      </article>`;
+
+    function render(id) {
+      const t = TRIMS.find((x) => x.id === id) || TRIMS[0];
+      [...trimPicker.children].forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.id === t.id)));
+      const pk = window.RAM_PKGS;
+      const stdPkgs = pk.filter((p) => p.avail[t.id] === "S" && !p.option).map((p) => p.name);
+      const groups = window.RAM_GROUPS.map((g) => {
+        const items = pk.filter((p) => p.avail[t.id] === "O" && p.group === g.id);
+        if (!items.length) return "";
+        return `
+          <div class="trim-group trim-${g.id}">
+            <h3>${esc(g.name)} <span>${items.length}</span></h3>
+            <p class="dim">${esc(g.desc)}</p>
+            <div class="pkg-list">${items.map((p) => pkgCard(p, g)).join("")}</div>
+          </div>`;
+      }).join("");
+
+      view.innerHTML = `
+        <div class="trim-card">
+          <div class="trim-title"><h2>${esc(t.name)}</h2><b>от ${usd(t.price)}</b></div>
+          <p class="trim-who">${esc(t.who)}</p>
+          <dl class="trim-facts">
+            <div><dt>Моторы</dt><dd>${esc(t.engines)}</dd></div>
+            <div><dt>Кабина и привод</dt><dd>${esc(t.body)}</dd></div>
+          </dl>
+          <h3>Уже в базе</h3>
+          <ul class="facts">
+            ${t.std.map((s) => `<li>${esc(s)}</li>`).join("")}
+            ${stdPkgs.length ? `<li>Пакеты в стандарте: ${esc(stdPkgs.join(", "))}</li>` : ""}
+          </ul>
+          ${t.notes.length ? `<div class="alert warn trim-notes">${t.notes.map((n) => `<p>${n}</p>`).join("")}</div>` : ""}
+        </div>
+        ${groups || `<p class="muted">Заводских пакетов для этой версии почти нет — всё основное уже в цене.</p>`}`;
+    }
+
+    trimPicker.addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-id]");
+      if (!b) return;
+      const url = new URL(location.href);
+      url.searchParams.set("trim", b.dataset.id);
+      history.replaceState(null, "", url);
+      render(b.dataset.id);
+      if (window.innerWidth < 700) view.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    render(new URLSearchParams(location.search).get("trim") || "bighorn");
+  }
+
+  /* =========================================================
    * Сравнения лоб в лоб
    * ========================================================= */
   const compareRoot = document.getElementById("compare-root");
