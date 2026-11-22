@@ -98,24 +98,26 @@ window.MODELS = [
     id: "ford-f150",
     brand: "Ford",
     name: "F-150",
-    tagline: "Самый продаваемый пикап Америки. Выбор моторов от 2.7 до гибрида — и у маленького мотора пошлина выше.",
-    generation: "14-е поколение",
-    msrpFrom: 37290,
-    msrpNote: "XL, по данным дилера Ford. XLT — от $45 695, Lariat — от $59 560, Platinum — от $68 800.",
-    msrpCheck: true,
+    tagline: "Самый продаваемый пикап Америки. С 2027 модельного года база — V6 3.0 вместо 2.7, а V8 5.0 есть в любой версии.",
+    generation: "14-е поколение, обновление 2027",
+    msrpFrom: 40155,
+    msrpNote: "XL 2027 модельного года, без доставки до дилера — по сайту Ford. STX — от $42 675, XLT — от $46 525, Lariat — от $57 730, Platinum — от $69 130.",
+    msrpCheck: false,
     gvwrKg: [2821, 3334],
     gvwrDefault: 3150,
     gvwrNote: "6 220–7 350 lb — все версии в пределах 3,5 т.",
     gvwrCheck: false,
     engines: [
-      { id: "f150-27", name: "2.7 V6 EcoBoost", fuel: "petrol", cc: 2694, hp: 325, note: "до 2 800 см³ → пошлина 15%", mpg: 20, grade: "regular" },
+      { id: "f150-30", name: "3.0 V6 EcoBoost", fuel: "petrol", cc: 2999, hp: 325, note: "базовый с 2027 модельного года; ≈3 000 см³ (у Ford — «3,0 л», точная цифра — в ПТС), больше 2 800 → пошлина 12,5%; расход EPA ещё не опубликован — считаем как у 2.7", mpg: 20, grade: "regular" },
+      { id: "f150-27", name: "2.7 V6 EcoBoost", fuel: "petrol", cc: 2694, hp: 325, note: "до 2026 модельного года; до 2 800 см³ → пошлина 15%", mpg: 20, grade: "regular" },
       { id: "f150-35", name: "3.5 V6 EcoBoost", fuel: "petrol", cc: 3496, hp: 400, note: "", mpg: 19, grade: "regular" },
       { id: "f150-50", name: "5.0 V8 Coyote", fuel: "petrol", cc: 4951, hp: 400, note: "", mpg: 19, grade: "regular" },
       { id: "f150-pb", name: "3.5 V6 PowerBoost", fuel: "petrol", cc: 3496, hp: 430, note: "полный гибрид; считаем как бензин — проверить", mpg: 23, grade: "regular" }
     ],
     rivals: ["ram-1500", "chevy-silverado", "gmc-sierra"],
     sources: [
-      { title: "Astro Ford: цены F-150 2026", url: "https://www.astroford.com/ford-models/2026-ford-f-150-xl.htm" },
+      { title: "Ford: F-150 2027 — цены версий и моторы", url: "https://www.ford.com/trucks/f150/" },
+      { title: "Ford: всё о F-150 2027 (новый базовый V6 3.0 вместо 2.7)", url: "https://www.fromtheroad.ford.com/us/en/articles/2026/2027-ford-f-150-specs-features" },
       { title: "Sneed Ford: масса и GVWR F-150", url: "https://www.sneedford.com/ford-f-150-weight.html" }
     ]
   },
