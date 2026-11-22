@@ -110,9 +110,9 @@ window.MODELS = [
     engines: [
       { id: "f150-30", name: "3.0 V6 EcoBoost", fuel: "petrol", cc: 2999, hp: 325, note: "базовый с 2027 модельного года; ≈3 000 см³ (у Ford — «3,0 л», точная цифра — в ПТС), больше 2 800 → пошлина 12,5%; расход EPA ещё не опубликован — считаем как у 2.7", mpg: 20, grade: "regular" },
       { id: "f150-27", name: "2.7 V6 EcoBoost", fuel: "petrol", cc: 2694, hp: 325, note: "до 2026 модельного года; до 2 800 см³ → пошлина 15%", mpg: 20, grade: "regular" },
-      { id: "f150-35", name: "3.5 V6 EcoBoost", fuel: "petrol", cc: 3496, hp: 400, note: "", mpg: 19, grade: "regular" },
+      { id: "f150-35", name: "3.5 V6 EcoBoost", fuel: "petrol", cc: 3496, hp: 382, note: "382 л.с. — по сайту Ford для 2027 модельного года (раньше указывали 400)", mpg: 19, grade: "regular" },
       { id: "f150-50", name: "5.0 V8 Coyote", fuel: "petrol", cc: 4951, hp: 400, note: "", mpg: 19, grade: "regular" },
-      { id: "f150-pb", name: "3.5 V6 PowerBoost", fuel: "petrol", cc: 3496, hp: 430, note: "полный гибрид; считаем как бензин — проверить", mpg: 23, grade: "regular" }
+      { id: "f150-pb", name: "3.5 V6 PowerBoost", fuel: "petrol", cc: 3496, hp: 420, note: "полный гибрид; считаем как бензин — проверить", mpg: 23, grade: "regular" }
     ],
     rivals: ["ram-1500", "chevy-silverado", "gmc-sierra"],
     sources: [
@@ -126,9 +126,9 @@ window.MODELS = [
     brand: "Ford",
     name: "F-150 Raptor",
     tagline: "Внедорожный F-150 с длинноходной подвеской. Прямой соперник RAM 1500 RHO.",
-    generation: "2026",
-    msrpFrom: 79005,
-    msrpNote: "Без доставки по США (по конфигуратору Ford).",
+    generation: "2027",
+    msrpFrom: 75325,
+    msrpNote: "Базовая версия 2027 года (с 2027 есть упрощённая — без проекции на стекло, противотуманок и т. п.), без доставки — по сайту Ford.",
     msrpCheck: false,
     gvwrKg: [3334, 3334],
     gvwrDefault: 3334,
@@ -141,7 +141,7 @@ window.MODELS = [
     ],
     rivals: ["ram-1500"],
     sources: [
-      { title: "Ford: F-150 Raptor 2026", url: "https://www.ford.com/trucks/f150raptor" },
+      { title: "Ford: F-150 Raptor 2027", url: "https://www.ford.com/trucks/f150/models/raptor/" },
       { title: "CarWhere: Ford F-150 Raptor", url: "https://www.carwhere.com/ford/raptor" },
       { title: "Ford: спецификации F-150 2026 (PDF)", url: "https://www.fromtheroad.ford.com/content/dam/fordmediasite/us/en/library/2026/specs/2026_Ford_F150_Specs.pdf" }
     ]
@@ -153,8 +153,8 @@ window.MODELS = [
     tagline: "720 л.с. из компрессорного V8. Пакет поверх Raptor — и прямой ответ TRX.",
     generation: "2026",
     msrpFrom: 110930,
-    msrpNote: "Raptor $79 005 + пакет R $31 925, без доставки.",
-    msrpCheck: false,
+    msrpNote: "Цена 2026 года: Raptor $79 005 + пакет R $31 925, без доставки. Цену Raptor R 2027 Ford ещё не объявил (ноябрь 2026).",
+    msrpCheck: true,
     gvwrKg: [3334, 3402],
     gvwrDefault: 3402,
     gvwrNote: "В карточках дилеров Ford указано 7 500 lb ≈ 3 402 кг (у обычного Raptor — 7 350 lb). В спецификации Ford цифры нет, поэтому сверяйте по ПТС: запас до 3,5 т — около 100 кг.",
@@ -176,23 +176,27 @@ window.MODELS = [
     brand: "Chevrolet",
     name: "Silverado 1500",
     tagline: "Классика GM. Близнец GMC Sierra — те же моторы, другой характер и цена.",
-    generation: "2026 (в 2027 — новое поколение)",
-    msrpFrom: 39695,
-    msrpNote: "Regular Cab. Источники расходятся ($39 695–44 295).",
-    msrpCheck: true,
+    generation: "Новое поколение, 2027",
+    msrpFrom: 38600,
+    msrpNote: "WT 2027 модельного года, без доставки до дилера ($2 795) — по сайту Chevrolet. Custom — от $43 600, Trail Boss — от $61 200, High Country — от $71 700, ZR2 — от $77 200.",
+    msrpCheck: false,
     gvwrKg: [2900, 3220],
     gvwrDefault: 3220,
-    gvwrNote: "Crew Cab 4WD — 7 000–7 100 lb (3 175–3 220 кг) по данным дилеров. Нижняя граница — оценка для Regular Cab.",
+    gvwrNote: "Crew Cab 4WD — 7 000–7 100 lb (3 175–3 220 кг) по данным дилеров для поколения до 2026 года; у нового поколения 2027 официальных цифр пока не нашли — сверяйте по ПТС. Нижняя граница — оценка для Regular Cab.",
     gvwrCheck: true,
     engines: [
-      { id: "silv-27", name: "2.7 I4 TurboMax", fuel: "petrol", cc: 2727, hp: 310, note: "до 2 800 см³ → пошлина 15%", mpg: 18, grade: "regular" },
-      { id: "silv-53", name: "5.3 V8", fuel: "petrol", cc: 5328, hp: 355, note: "", mpg: 17, grade: "regular" },
-      { id: "silv-62", name: "6.2 V8", fuel: "petrol", cc: 6162, hp: 420, note: "", mpg: 17, grade: "premium" },
-      { id: "silv-30d", name: "3.0 I6 Duramax", fuel: "diesel", cc: 2993, hp: 305, note: "дизель → пошлина 10%", mpg: 23, grade: "diesel" }
+      { id: "silv-27", name: "2.7 I4 TurboMax", fuel: "petrol", cc: 2727, hp: 350, note: "с 2027 — 350 л.с. (до 2026 — 310); до 2 800 см³ → пошлина 15%; расход EPA для 2027 ещё не опубликован — берём 2026", mpg: 18, grade: "regular" },
+      { id: "silv-57", name: "5.7 V8 (новый)", fuel: "petrol", cc: 5735, hp: 402, note: "с 2027 модельного года, заменил 5.3; 350 куб. дюймов ≈ 5 735 см³", mpg: 16, grade: "regular" },
+      { id: "silv-66", name: "6.6 V8 (новый)", fuel: "petrol", cc: 6555, hp: 481, note: "с 2027 модельного года, заменил 6.2; 400 куб. дюймов ≈ 6 555 см³", mpg: 15, grade: "premium" },
+      { id: "silv-30d", name: "3.0 I6 Duramax", fuel: "diesel", cc: 2993, hp: 305, note: "дизель → пошлина 10%", mpg: 22, grade: "diesel" },
+      { id: "silv-53", name: "5.3 V8", fuel: "petrol", cc: 5328, hp: 355, note: "до 2026 модельного года", mpg: 17, grade: "regular" },
+      { id: "silv-62", name: "6.2 V8", fuel: "petrol", cc: 6162, hp: 420, note: "до 2026 модельного года", mpg: 17, grade: "premium" }
     ],
     rivals: ["gmc-sierra", "ram-1500", "ford-f150"],
     sources: [
-      { title: "KBB: Silverado 1500 2026", url: "https://www.kbb.com/chevrolet/silverado-1500/2026/" }
+      { title: "Chevrolet: Silverado 1500 2027 — цены версий", url: "https://www.chevrolet.com/trucks/silverado/1500" },
+      { title: "GM: пресс-релиз о Silverado 1500 2027 (моторы, мощность)", url: "https://news.gm.com/home.detail.html/Pages/news/us/en/2026/jun/0516-chevrolet-next-generation-2027-silverado.html" },
+      { title: "fueleconomy.gov: расход Silverado 2027", url: "https://www.fueleconomy.gov/feg/PowerSearch.do?action=noform&path=1&year1=2027&year2=2027&make=Chevrolet&baseModel=Silverado&srchtyp=ymm&pageno=1&rowLimit=50" }
     ]
   },
   {
@@ -200,23 +204,27 @@ window.MODELS = [
     brand: "GMC",
     name: "Sierra 1500",
     tagline: "Тот же Silverado, только «премиальнее». Денали, AT4X — и вечный вопрос, за что переплата.",
-    generation: "2026 (в 2027 — новое поколение)",
-    msrpFrom: 38300,
-    msrpNote: "Pro, без доставки. Диапазон по версиям: $38 300–84 200.",
+    generation: "Новое поколение, 2027",
+    msrpFrom: 39300,
+    msrpNote: "Стартовая цена 2027 модельного года по сайту GMC, без доставки ($2 795); начальная версия — Pro. С доставкой, по данным прессы: Pro Crew Cab — $51 295, Elevation — $59 995, AT4 — $73 495, Denali — $76 795, AT4X — $85 495, Denali Ultimate — $87 895.",
     msrpCheck: false,
     gvwrKg: [2900, 3220],
     gvwrDefault: 3220,
-    gvwrNote: "Платформа та же, что у Silverado: Crew Cab 4WD — около 7 100 lb (3 220 кг). Нижняя граница — оценка.",
+    gvwrNote: "Платформа та же, что у Silverado: Crew Cab 4WD — около 7 100 lb (3 220 кг) у поколения до 2026 года; для 2027 сверяйте по ПТС. Нижняя граница — оценка.",
     gvwrCheck: true,
     engines: [
-      { id: "sierra-27", name: "2.7 I4 TurboMax", fuel: "petrol", cc: 2727, hp: 310, note: "до 2 800 см³ → пошлина 15%", mpg: 18, grade: "regular" },
-      { id: "sierra-53", name: "5.3 V8", fuel: "petrol", cc: 5328, hp: 355, note: "", mpg: 16, grade: "regular" },
-      { id: "sierra-62", name: "6.2 V8", fuel: "petrol", cc: 6162, hp: 420, note: "", mpg: 16, grade: "premium" },
-      { id: "sierra-30d", name: "3.0 I6 Duramax", fuel: "diesel", cc: 2993, hp: 305, note: "дизель → пошлина 10%", mpg: 23, grade: "diesel" }
+      { id: "sierra-27", name: "2.7 I4 TurboMax", fuel: "petrol", cc: 2727, hp: 350, note: "с 2027 — 350 л.с. (до 2026 — 310); до 2 800 см³ → пошлина 15%; расход EPA для 2027 ещё не опубликован — берём 2026", mpg: 18, grade: "regular" },
+      { id: "sierra-57", name: "5.7 V8 (новый)", fuel: "petrol", cc: 5735, hp: 402, note: "с 2027 модельного года, заменил 5.3; 350 куб. дюймов ≈ 5 735 см³", mpg: 16, grade: "regular" },
+      { id: "sierra-66", name: "6.6 V8 (новый)", fuel: "petrol", cc: 6555, hp: 481, note: "с 2027 модельного года, заменил 6.2; 400 куб. дюймов ≈ 6 555 см³", mpg: 15, grade: "premium" },
+      { id: "sierra-30d", name: "3.0 I6 Duramax", fuel: "diesel", cc: 2993, hp: 305, note: "дизель → пошлина 10%", mpg: 21, grade: "diesel" },
+      { id: "sierra-53", name: "5.3 V8", fuel: "petrol", cc: 5328, hp: 355, note: "до 2026 модельного года", mpg: 16, grade: "regular" },
+      { id: "sierra-62", name: "6.2 V8", fuel: "petrol", cc: 6162, hp: 420, note: "до 2026 модельного года", mpg: 16, grade: "premium" }
     ],
     rivals: ["chevy-silverado", "ram-1500", "ford-f150"],
     sources: [
-      { title: "Equipment World: GMC Sierra 1500 2026", url: "https://www.equipmentworld.com/trucks/pickups/article/15755341/2026-gmc-sierra-1500-revealed-8-trims-4-engines" }
+      { title: "GMC: Sierra 1500 2027", url: "https://www.gmc.com/trucks/sierra/1500" },
+      { title: "Motor1: цены Sierra 1500 2027 по версиям", url: "https://www.motor1.com/news/809320/2027-gmc-sierra-1500-price-trims-engines/" },
+      { title: "fueleconomy.gov: расход Sierra 2027", url: "https://www.fueleconomy.gov/feg/PowerSearch.do?action=noform&path=1&year1=2027&year2=2027&make=GMC&baseModel=Sierra&srchtyp=ymm&pageno=1&rowLimit=50" }
     ]
   }
 ];
