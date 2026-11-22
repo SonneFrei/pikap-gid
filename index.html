@@ -22,19 +22,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=20261121d">
+  <link rel="stylesheet" href="assets/css/style.css?v=20261122a">
 </head>
 <body>
   <header class="site-header">
     <div class="wrap">
       <a class="logo" href="index.html" aria-label="Полтонны — на главную"><span class="logo-mark" aria-hidden="true">½</span><span class="logo-text">Полтонны</span></a>
-      <nav class="nav" aria-label="Разделы">
-        <a href="index.html" class="active">Главная</a>
+      <nav class="nav" id="site-nav" aria-label="Разделы">
+        <a href="index.html" class="active" aria-current="page">Главная</a>
         <a href="models.html">Модели</a>
         <a href="compare.html">Сравнить</a>
         <a href="issues.html">Болячки</a>
+        <a href="articles.html">Разборы</a>
         <a href="calculator.html">Калькулятор</a>
       </nav>
+      <a class="nav-cta" href="calculator.html">Калькулятор</a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Меню</button>
     </div>
   </header>
 
@@ -68,7 +71,7 @@
             <p class="muted">Пикап до 3,5 т в России — грузовой автомобиль. Утильсбор у него не зависит от мощности, и это экономит миллионы. Но у статуса грузовика есть обратная сторона, а граница 3,5 т меняет права, скорость, парковку и растаможку.</p>
             <div style="display:flex;gap:10px;flex-wrap:wrap">
               <a class="btn" href="limit-3500.html">Читать разбор</a>
-              <a class="btn ghost" href="calculator.html">Посчитать свою машину</a>
+              <a class="btn ghost" href="articles.html">Все разборы</a>
             </div>
           </div>
           <div class="vs">
@@ -108,7 +111,7 @@
           <div class="card">
             <div class="top"><span class="num">03</span><span class="badge soon">скоро</span></div>
             <h3>Переводчик конфигуратора</h3>
-            <p>Что входит в каждый пакет, что реально нужно в России и что можно взять отдельно.</p>
+            <p>Что входит в каждый пакет, что реально нужно в России и за что не стоит платить. Выйдет в разборах, в рубрике «Обзоры и комплектации».</p>
           </div>
           <a class="card" href="issues.html">
             <div class="top"><span class="num">04</span><span class="badge ok">готово</span></div>
@@ -135,11 +138,11 @@
             <h3>Сравнения лоб в лоб</h3>
             <p>RAM 1500 против F-150, TRX против Raptor R, Silverado против Sierra — или любые две модели.</p>
           </a>
-          <div class="card">
-            <div class="top"><span class="num">09</span><span class="badge soon">скоро</span></div>
-            <h3>Новости и разборы</h3>
-            <p>Новинки, возвращение HEMI V8, интересные лоты — в Telegram-канале.</p>
-          </div>
+          <a class="card" href="articles.html">
+            <div class="top"><span class="num">09</span><span class="badge ok">открыто</span></div>
+            <h3>Разборы и обзоры</h3>
+            <p>Деньги и растаможка, правила, обзоры моделей и комплектаций, надёжность. Новости — скоро в Telegram-канале.</p>
+          </a>
         </div>
       </div>
     </section>
@@ -152,9 +155,9 @@
     </div>
   </footer>
 
-  <script src="assets/js/analytics.js?v=20261121d"></script>
-  <script src="assets/js/rules.js?v=20261121d"></script>
-  <script src="assets/js/models.js?v=20261121d"></script>
-  <script src="assets/js/app.js?v=20261121d"></script>
+  <script src="assets/js/analytics.js?v=20261122a"></script>
+  <script src="assets/js/rules.js?v=20261122a"></script>
+  <script src="assets/js/models.js?v=20261122a"></script>
+  <script src="assets/js/app.js?v=20261122a"></script>
 </body>
 </html>

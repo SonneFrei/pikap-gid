@@ -26,6 +26,63 @@
     return cbrPromise;
   };
 
+  /* ---------- Мобильное меню ---------- */
+  const siteHeader = document.querySelector(".site-header");
+  const navToggle = siteHeader && siteHeader.querySelector(".nav-toggle");
+  if (navToggle) {
+    const setNavOpen = (open) => {
+      siteHeader.classList.toggle("open", open);
+      navToggle.setAttribute("aria-expanded", String(open));
+      navToggle.textContent = open ? "Закрыть" : "Меню";
+    };
+    navToggle.addEventListener("click", () => setNavOpen(!siteHeader.classList.contains("open")));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") setNavOpen(false); });
+    document.addEventListener("click", (e) => { if (!siteHeader.contains(e.target)) setNavOpen(false); });
+  }
+
+  /* ---------- Разборы: рубрики и список статей ---------- */
+  const rubricsBox = document.getElementById("rubrics");
+  if (rubricsBox && window.ARTICLES) {
+    const RUB = window.ARTICLE_RUBRICS;
+    const rubName = (id) => (RUB.find((r) => r.id === id) || {}).name || id;
+    const listBox = document.getElementById("article-list");
+    const count = (id) => window.ARTICLES.filter((a) => a.rubrics.includes(id)).length;
+    const dateRu = (iso) => new Date(iso + "T12:00:00").toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
+    let current = new URLSearchParams(location.search).get("r");
+    if (!RUB.some((r) => r.id === current) || !count(current)) current = null;
+
+    const render = () => {
+      rubricsBox.innerHTML = RUB.map((r) => {
+        const n = count(r.id);
+        const state = n ? `${n} ${n === 1 ? "разбор" : n < 5 ? "разбора" : "разборов"}` : "скоро";
+        return `<button type="button" class="rubric" data-r="${esc(r.id)}" aria-pressed="${current === r.id}" ${n ? "" : "disabled"}>` +
+          `<b>${esc(r.name)}</b><span>${esc(r.desc)}</span><small>${state}</small></button>`;
+      }).join("");
+      const items = window.ARTICLES.filter((a) => !current || a.rubrics.includes(current));
+      listBox.innerHTML = items.map((a) =>
+        `<a class="article-card" href="${esc(a.url)}">` +
+        `<div class="meta">${a.rubrics.map((r) => `<span class="badge soon">${esc(rubName(r))}</span>`).join("")}<span>${esc(dateRu(a.date))}</span></div>` +
+        `<h3>${esc(a.title)}</h3><p>${esc(a.lead)}</p></a>`
+      ).join("") +
+        (current ? `<p class="dim" style="margin:4px 0 0;font-size:14px">Показана рубрика «${esc(rubName(current))}». <a href="articles.html" data-r="">Все разборы</a></p>` : "");
+    };
+    const pick = (id) => {
+      current = id && id !== current ? id : null;
+      history.replaceState(null, "", current ? "?r=" + current : location.pathname);
+      render();
+    };
+    rubricsBox.addEventListener("click", (e) => { const b = e.target.closest("button[data-r]"); if (b && !b.disabled) pick(b.dataset.r); });
+    listBox.addEventListener("click", (e) => { const a = e.target.closest("a[data-r]"); if (a) { e.preventDefault(); pick(null); } });
+    render();
+
+    const planned = window.ARTICLES_PLANNED || [];
+    if (planned.length) {
+      document.getElementById("planned-list").innerHTML = planned.map((p) =>
+        `<li>${esc(p.title)}<small>${esc(rubName(p.rubric))}</small></li>`).join("");
+      document.getElementById("planned").hidden = false;
+    }
+  }
+
   const statusBadge = (status) =>
     status === "ok"
       ? '<span class="badge ok">проверено</span>'
@@ -568,13 +625,34 @@
     presetInfo: $("preset-info")
   };
 
-  // Наполняем список пресетов
-  el.preset.innerHTML =
-    window.MODELS.map((m) =>
-      `<optgroup label="${esc(m.brand + " " + m.name)}">` +
-      m.engines.map((e) => `<option value="${esc(e.id)}">${esc(m.brand + " " + m.name + " — " + e.name)}</option>`).join("") +
-      "</optgroup>"
-    ).join("") + '<option value="custom">Другая машина — ввести вручную</option>';
+  // Два списка: модель → мотор этой модели. el.preset — это список моторов (id мотора или "custom").
+  el.model = $("model");
+  el.engineField = $("engine-field");
+  el.lockHint = $("lock-hint");
+  el.model.innerHTML =
+    window.MODELS.map((m) => `<option value="${esc(m.id)}">${esc(m.brand + " " + m.name)}</option>`).join("") +
+    '<option value="custom">Другая машина — ввести вручную</option>';
+
+  function fillEngines(modelId) {
+    const m = window.findModel(modelId);
+    if (!m) {
+      el.preset.innerHTML = '<option value="custom">—</option>';
+      el.preset.value = "custom";
+      el.engineField.hidden = true;
+      return;
+    }
+    el.engineField.hidden = false;
+    el.preset.innerHTML = m.engines.map((e) => `<option value="${esc(e.id)}">${esc(e.name + " · " + e.hp + " л.с.")}</option>`).join("");
+  }
+
+  // У выбранного мотора топливо, объём и мощность известны — менять их нельзя, иначе расчёт
+  // выйдет под чужим названием (например, «дизельный» RAM 1500). Свои цифры — через «Другая машина».
+  function setLocked(locked) {
+    form.querySelectorAll('input[name="fuel"]').forEach((i) => { i.disabled = locked; });
+    el.cc.readOnly = locked;
+    el.hp.readOnly = locked;
+    el.lockHint.hidden = !locked;
+  }
 
   const num = (input) => {
     const v = parseFloat(String(input.value).replace(/\s/g, "").replace(",", "."));
@@ -584,7 +662,8 @@
   let priceTouched = false; // человек сам вписал цену (например, из объявления о б/у)
   function applyPreset(engineId) {
     const found = window.findEngine(engineId);
-    if (!found) { el.presetInfo.textContent = "Введите параметры машины вручную."; return; }
+    if (!found) { setLocked(false); el.presetInfo.textContent = ""; return; }
+    setLocked(true);
     const { model, engine } = found;
     form.querySelector(`input[name="fuel"][value="${engine.fuel}"]`).checked = true;
     el.cc.value = engine.cc;
@@ -873,6 +952,9 @@
   const qs = new URLSearchParams(location.search);
   const startEngine = qs.get("engine") && (window.findEngine(qs.get("engine")) || qs.get("engine") === "custom")
     ? qs.get("engine") : window.MODELS[0].engines[1].id;
+  const startFound = window.findEngine(startEngine);
+  el.model.value = startFound ? startFound.model.id : "custom";
+  fillEngines(el.model.value);
   el.preset.value = startEngine;
   applyPreset(startEngine);
   if (qs.get("age") && form.querySelector(`input[name="age"][value="${CSS.escape(qs.get("age"))}"]`)) {
@@ -906,9 +988,14 @@
   });
 
   el.fuelSel.addEventListener("input", () => { el.fuelPrice.value = R.fuel.prices[el.fuelSel.value] || el.fuelPrice.value; });
+  el.model.addEventListener("change", () => {
+    fillEngines(el.model.value);
+    applyPreset(el.preset.value); // у новой модели — её первый мотор; для «Другой машины» поля открываются с текущими цифрами
+    compute(); track();
+  });
   el.preset.addEventListener("change", () => { applyPreset(el.preset.value); compute(); track(); });
   el.price.addEventListener("input", () => { priceTouched = true; });
-  form.addEventListener("input", (e) => { if (e.target !== el.preset) { compute(); track(); } });
+  form.addEventListener("input", (e) => { if (e.target !== el.preset && e.target !== el.model) { compute(); track(); } });
   form.addEventListener("submit", (e) => e.preventDefault());
   compute();
 })();
