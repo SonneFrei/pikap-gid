@@ -1,12 +1,12 @@
 /* Сгенерировано scripts/nhtsa_fetch.py — не редактировать вручную. */
 window.NHTSA = {
- "generated": "2026-11-19",
+ "generated": "2026-11-22",
  "source": "NHTSA (api.nhtsa.gov)",
  "models": {
   "ram-1500": {
    "years": [
     2021,
-    2025
+    2027
    ],
    "nhtsaNames": [
     "1500",
@@ -17,38 +17,40 @@ window.NHTSA = {
     "RAM 1500 QUAD CAB"
    ],
    "complaints": {
-    "total": 2010,
+    "total": 2123,
     "byYear": {
-     "2021": 692,
+     "2021": 694,
      "2022": 646,
      "2023": 211,
      "2024": 79,
-     "2025": 382
+     "2025": 382,
+     "2026": 110,
+     "2027": 1
     },
     "byComponent": [
      [
       "ELECTRICAL SYSTEM",
-      711
+      765
      ],
      [
       "ENGINE",
-      685
+      701
      ],
      [
       "POWER TRAIN",
-      311
+      323
      ],
      [
       "UNKNOWN OR OTHER",
-      302
+      321
      ],
      [
       "SERVICE BRAKES",
-      200
+      210
      ],
      [
       "FORWARD COLLISION AVOIDANCE",
-      189
+      196
      ],
      [
       "FUEL/PROPULSION SYSTEM",
@@ -56,31 +58,51 @@ window.NHTSA = {
      ],
      [
       "STEERING",
-      141
+      143
      ],
      [
       "EXTERIOR LIGHTING",
-      106
+      116
      ],
      [
       "VEHICLE SPEED CONTROL",
-      75
+      76
      ],
      [
       "STRUCTURE",
-      72
+      75
      ],
      [
       "VISIBILITY/WIPER",
-      63
+      69
      ]
     ],
-    "crashes": 77,
-    "fires": 17,
-    "injuries": 45,
+    "crashes": 81,
+    "fires": 18,
+    "injuries": 47,
     "deaths": 2
    },
    "recalls": [
+    {
+     "id": "26V623000",
+     "date": "29/09/2026",
+     "component": "TIRES:PRESSURE MONITORING AND REGULATING SYSTEMS",
+     "parkIt": false,
+     "parkOutSide": false,
+     "years": [
+      2026
+     ]
+    },
+    {
+     "id": "26V622000",
+     "date": "29/09/2026",
+     "component": "AIR BAGS:SIDE/WINDOW",
+     "parkIt": false,
+     "parkOutSide": false,
+     "years": [
+      2026
+     ]
+    },
     {
      "id": "26V560000",
      "date": "01/09/2026",
@@ -88,7 +110,18 @@ window.NHTSA = {
      "parkIt": false,
      "parkOutSide": false,
      "years": [
-      2025
+      2025,
+      2026
+     ]
+    },
+    {
+     "id": "26V531000",
+     "date": "13/08/2026",
+     "component": "BACK OVER PREVENTION: SENSING SYSTEM: CAMERA",
+     "parkIt": false,
+     "parkOutSide": false,
+     "years": [
+      2026
      ]
     },
     {
@@ -102,7 +135,18 @@ window.NHTSA = {
       2022,
       2023,
       2024,
-      2025
+      2025,
+      2026
+     ]
+    },
+    {
+     "id": "26V421000",
+     "date": "01/07/2026",
+     "component": "EXTERIOR LIGHTING:HEADLIGHTS",
+     "parkIt": false,
+     "parkOutSide": false,
+     "years": [
+      2026
      ]
     },
     {
@@ -122,7 +166,8 @@ window.NHTSA = {
      "parkIt": false,
      "parkOutSide": false,
      "years": [
-      2025
+      2025,
+      2026
      ]
     },
     {
@@ -132,7 +177,8 @@ window.NHTSA = {
      "parkIt": false,
      "parkOutSide": false,
      "years": [
-      2025
+      2025,
+      2026
      ]
     },
     {
@@ -142,7 +188,8 @@ window.NHTSA = {
      "parkIt": false,
      "parkOutSide": false,
      "years": [
-      2025
+      2025,
+      2026
      ]
     },
     {
@@ -479,7 +526,7 @@ window.NHTSA = {
   "ford-f150": {
    "years": [
     2021,
-    2025
+    2027
    ],
    "nhtsaNames": [
     "F-150  REGULAR CAB",
@@ -494,26 +541,27 @@ window.NHTSA = {
     "F-150 SUPER CREW HEV"
    ],
    "complaints": {
-    "total": 3055,
+    "total": 3085,
     "byYear": {
      "2021": 1332,
-     "2022": 828,
-     "2023": 525,
+     "2022": 830,
+     "2023": 529,
      "2024": 239,
-     "2025": 131
+     "2025": 131,
+     "2026": 24
     },
     "byComponent": [
      [
       "POWER TRAIN",
-      1009
+      1015
      ],
      [
       "ELECTRICAL SYSTEM",
-      575
+      581
      ],
      [
       "UNKNOWN OR OTHER",
-      392
+      396
      ],
      [
       "EXTERIOR LIGHTING",
@@ -521,15 +569,15 @@ window.NHTSA = {
      ],
      [
       "ENGINE",
-      240
+      247
      ],
      [
       "SERVICE BRAKES",
-      189
+      199
      ],
      [
       "FORWARD COLLISION AVOIDANCE",
-      165
+      172
      ],
      [
       "FUEL/PROPULSION SYSTEM",
@@ -541,7 +589,7 @@ window.NHTSA = {
      ],
      [
       "VISIBILITY",
-      125
+      126
      ],
      [
       "FUEL SYSTEM, GASOLINE",
@@ -549,15 +597,26 @@ window.NHTSA = {
      ],
      [
       "STRUCTURE",
-      101
+      102
      ]
     ],
-    "crashes": 91,
+    "crashes": 93,
     "fires": 30,
     "injuries": 80,
     "deaths": 1
    },
    "recalls": [
+    {
+     "id": "26V689000",
+     "date": "20/10/2026",
+     "component": "STRUCTURE:BODY:TAILGATE:HINGE AND ATTACHMENTS",
+     "parkIt": false,
+     "parkOutSide": false,
+     "years": [
+      2026,
+      2027
+     ]
+    },
     {
      "id": "26V655000",
      "date": "06/10/2026",
@@ -565,7 +624,19 @@ window.NHTSA = {
      "parkIt": false,
      "parkOutSide": false,
      "years": [
-      2025
+      2025,
+      2026,
+      2027
+     ]
+    },
+    {
+     "id": "26V653000",
+     "date": "06/10/2026",
+     "component": "ELECTRICAL SYSTEM: INSTRUMENT CLUSTER/PANEL",
+     "parkIt": false,
+     "parkOutSide": false,
+     "years": [
+      2026
      ]
     },
     {
@@ -577,12 +648,44 @@ window.NHTSA = {
      "years": [
       2023,
       2024,
-      2025
+      2025,
+      2026,
+      2027
+     ]
+    },
+    {
+     "id": "26V577000",
+     "date": "09/09/2026",
+     "component": "SUSPENSION:REAR",
+     "parkIt": false,
+     "parkOutSide": false,
+     "years": [
+      2026
+     ]
+    },
+    {
+     "id": "26V576000",
+     "date": "09/09/2026",
+     "component": "POWER TRAIN:DRIVELINE:DIFFERENTIAL UNIT",
+     "parkIt": false,
+     "parkOutSide": false,
+     "years": [
+      2026
+     ]
+    },
+    {
+     "id": "26V550000",
+     "date": "25/08/2026",
+     "component": "STRUCTURE:BODY",
+     "parkIt": false,
+     "parkOutSide": false,
+     "years": [
+      2026
      ]
     },
     {
      "id": "26V489000",
-     "date": "29/07/2026",
+     "date": "28/07/2026",
      "component": "BACK OVER PREVENTION:DISPLAY FUNCTION",
      "parkIt": false,
      "parkOutSide": false,
@@ -613,7 +716,8 @@ window.NHTSA = {
       2022,
       2023,
       2024,
-      2025
+      2025,
+      2026
      ]
     },
     {
@@ -1166,7 +1270,7 @@ window.NHTSA = {
   "ford-raptor": {
    "years": [
     2021,
-    2025
+    2027
    ],
    "nhtsaNames": [
     "F-150  REGULAR CAB (только жалобы, где в тексте есть «RAPTOR»)",
@@ -1181,13 +1285,14 @@ window.NHTSA = {
     "F-150 SUPER CREW HEV (только жалобы, где в тексте есть «RAPTOR»)"
    ],
    "complaints": {
-    "total": 15,
+    "total": 17,
     "byYear": {
      "2021": 2,
      "2022": 5,
      "2023": 2,
      "2024": 5,
-     "2025": 1
+     "2025": 1,
+     "2026": 2
     },
     "byComponent": [
      [
@@ -1207,6 +1312,10 @@ window.NHTSA = {
       2
      ],
      [
+      "FORWARD COLLISION AVOIDANCE",
+      2
+     ],
+     [
       "STEERING",
       2
      ],
@@ -1215,11 +1324,11 @@ window.NHTSA = {
       2
      ],
      [
-      "FUEL/PROPULSION SYSTEM",
-      1
+      "SERVICE BRAKES",
+      2
      ],
      [
-      "FORWARD COLLISION AVOIDANCE",
+      "FUEL/PROPULSION SYSTEM",
       1
      ],
      [
@@ -1232,10 +1341,6 @@ window.NHTSA = {
      ],
      [
       "POWER TRAIN",
-      1
-     ],
-     [
-      "SERVICE BRAKES",
       1
      ]
     ],
@@ -1260,76 +1365,97 @@ window.NHTSA = {
   "chevy-silverado": {
    "years": [
     2021,
-    2025
+    2027
    ],
    "nhtsaNames": [
     "SILVERADO 1500"
    ],
    "complaints": {
-    "total": 2384,
+    "total": 2528,
     "byYear": {
-     "2021": 865,
-     "2022": 671,
-     "2023": 404,
-     "2024": 327,
-     "2025": 117
+     "2021": 866,
+     "2022": 672,
+     "2023": 406,
+     "2024": 328,
+     "2025": 119,
+     "2026": 137
     },
     "byComponent": [
      [
       "ENGINE",
-      1039
+      1120
      ],
      [
       "POWER TRAIN",
-      672
+      704
      ],
      [
       "ELECTRICAL SYSTEM",
-      392
+      427
      ],
      [
       "UNKNOWN OR OTHER",
-      220
+      241
      ],
      [
       "FUEL/PROPULSION SYSTEM",
+      146
+     ],
+     [
+      "SERVICE BRAKES",
       139
      ],
      [
       "ENGINE AND ENGINE COOLING",
-      133
-     ],
-     [
-      "SERVICE BRAKES",
-      128
+      134
      ],
      [
       "FORWARD COLLISION AVOIDANCE",
-      87
+      96
      ],
      [
       "STEERING",
-      82
+      88
      ],
      [
       "STRUCTURE",
-      59
+      62
      ],
      [
       "VEHICLE SPEED CONTROL",
-      57
+      60
      ],
      [
       "LATCHES/LOCKS/LINKAGES",
       35
      ]
     ],
-    "crashes": 51,
-    "fires": 29,
-    "injuries": 48,
+    "crashes": 52,
+    "fires": 31,
+    "injuries": 49,
     "deaths": 0
    },
    "recalls": [
+    {
+     "id": "26V289000",
+     "date": "07/05/2026",
+     "component": "POWER TRAIN:TRANSFER CASE (4-WHEEL DRIVE)",
+     "parkIt": true,
+     "parkOutSide": false,
+     "years": [
+      2026
+     ]
+    },
+    {
+     "id": "26V114000",
+     "date": "26/02/2026",
+     "component": "EQUIPMENT:OTHER:OWNERS/SERVICE/OTHER MANUAL",
+     "parkIt": false,
+     "parkOutSide": false,
+     "years": [
+      2026
+     ]
+    },
     {
      "id": "26V083000",
      "date": "13/02/2026",
@@ -1339,6 +1465,16 @@ window.NHTSA = {
      "years": [
       2021,
       2022
+     ]
+    },
+    {
+     "id": "25V815000",
+     "date": "25/11/2025",
+     "component": "EQUIPMENT:OTHER:OWNERS/SERVICE/OTHER MANUAL",
+     "parkIt": false,
+     "parkOutSide": false,
+     "years": [
+      2026
      ]
     },
     {
@@ -1471,52 +1607,53 @@ window.NHTSA = {
   "gmc-sierra": {
    "years": [
     2021,
-    2025
+    2027
    ],
    "nhtsaNames": [
     "SIERRA 1500"
    ],
    "complaints": {
-    "total": 2265,
+    "total": 2359,
     "byYear": {
-     "2021": 610,
-     "2022": 615,
+     "2021": 611,
+     "2022": 616,
      "2023": 522,
      "2024": 386,
-     "2025": 132
+     "2025": 132,
+     "2026": 92
     },
     "byComponent": [
      [
       "ENGINE",
-      1052
+      1117
      ],
      [
       "POWER TRAIN",
-      464
+      485
      ],
      [
       "ELECTRICAL SYSTEM",
-      297
+      312
      ],
      [
       "STRUCTURE",
-      256
+      257
      ],
      [
       "UNKNOWN OR OTHER",
-      231
+      236
      ],
      [
       "FUEL/PROPULSION SYSTEM",
-      141
+      149
      ],
      [
       "ENGINE AND ENGINE COOLING",
-      139
+      141
      ],
      [
       "SERVICE BRAKES",
-      85
+      88
      ],
      [
       "STEERING",
@@ -1524,23 +1661,43 @@ window.NHTSA = {
      ],
      [
       "FORWARD COLLISION AVOIDANCE",
-      71
+      72
      ],
      [
       "VEHICLE SPEED CONTROL",
-      45
+      47
      ],
      [
       "LANE DEPARTURE",
       34
      ]
     ],
-    "crashes": 29,
+    "crashes": 30,
     "fires": 16,
     "injuries": 15,
     "deaths": 0
    },
    "recalls": [
+    {
+     "id": "26V289000",
+     "date": "07/05/2026",
+     "component": "POWER TRAIN:TRANSFER CASE (4-WHEEL DRIVE)",
+     "parkIt": true,
+     "parkOutSide": false,
+     "years": [
+      2026
+     ]
+    },
+    {
+     "id": "26V114000",
+     "date": "26/02/2026",
+     "component": "EQUIPMENT:OTHER:OWNERS/SERVICE/OTHER MANUAL",
+     "parkIt": false,
+     "parkOutSide": false,
+     "years": [
+      2026
+     ]
+    },
     {
      "id": "26V083000",
      "date": "13/02/2026",

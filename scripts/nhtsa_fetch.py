@@ -29,6 +29,12 @@ OUT_RAW = ROOT / "scripts" / "out" / "nhtsa_raw.json"
 OUT_JS = ROOT / "assets" / "data" / "nhtsa.js"
 API = "https://api.nhtsa.gov"
 
+# Модельные годы: с 2021 по «следующий» — новый модельный год в США выходит летом-осенью
+# предыдущего календарного года (2027 MY — с середины 2026). Не вписывать конечный год руками:
+# так в ноябре 2026 сайт показывал только 2021–2025.
+FIRST_YEAR = 2021
+YEARS = range(FIRST_YEAR, date.today().year + 2)
+
 # Группы моделей. complaints_re — по каким названиям из базы жалоб собирать;
 # recall_re — по каким названиям собирать отзывные кампании (в той базе они другие).
 #
@@ -38,7 +44,7 @@ API = "https://api.nhtsa.gov"
 # где модель прямо названа в тексте (derive_from + text_filter).
 GROUPS = [
     {
-        "id": "ram-1500", "make": "RAM", "years": range(2021, 2026),
+        "id": "ram-1500", "make": "RAM", "years": YEARS,
         "complaints_re": r"^(RAM )?1500( (CREW|QUAD|REGULAR) CAB)?( RHO)?$",
         "recall_models": ["1500", "RAM 1500"], "recall_re": r"^(RAM )?1500\b", "recall_exclude": r"CLASSIC",
     },
@@ -46,20 +52,20 @@ GROUPS = [
         "id": "ram-trx", "derive_from": "ram-1500", "text_filter": r"\bTRX\b", "years": range(2021, 2025),
     },
     {
-        "id": "ford-f150", "make": "FORD", "years": range(2021, 2026),
+        "id": "ford-f150", "make": "FORD", "years": YEARS,
         "complaints_re": r"^F-150\s*\(?(REGULAR CAB|SUPER CAB|SUPER CREW)\)?(\s+(GAS|HEV))?$",
         "recall_models": ["F-150"], "recall_re": r"^F-150\b", "recall_exclude": r"LIGHTNING|BEV",
     },
     {
-        "id": "ford-raptor", "derive_from": "ford-f150", "text_filter": r"\bRAPTOR\b", "years": range(2021, 2026),
+        "id": "ford-raptor", "derive_from": "ford-f150", "text_filter": r"\bRAPTOR\b", "years": YEARS,
     },
     {
-        "id": "chevy-silverado", "make": "CHEVROLET", "years": range(2021, 2026),
+        "id": "chevy-silverado", "make": "CHEVROLET", "years": YEARS,
         "complaints_re": r"^SILVERADO 1500$",
         "recall_models": ["SILVERADO 1500", "SILVERADO"], "recall_re": r"^SILVERADO 1500\b", "recall_exclude": r"LTD|LIMITED|EV\b",
     },
     {
-        "id": "gmc-sierra", "make": "GMC", "years": range(2021, 2026),
+        "id": "gmc-sierra", "make": "GMC", "years": YEARS,
         "complaints_re": r"^SIERRA 1500$",
         "recall_models": ["SIERRA 1500", "SIERRA"], "recall_re": r"^SIERRA 1500\b", "recall_exclude": r"LIMITED|EV\b",
     },
