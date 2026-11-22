@@ -396,6 +396,10 @@ table.cmp .neg { color: var(--danger); }
 .mi.bad .mi-icon { background: rgba(255, 107, 91, .16); color: var(--danger); }
 .mi.check .mi-icon { background: rgba(255, 204, 77, .14); color: var(--warn); }
 .mass-table { min-width: 0; }
+.city-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 8px 0 4px; }
+.city-inputs .field > span { font-weight: 700; font-size: 14px; }
+.city-inputs input { font-family: var(--font-head); font-size: 20px; }
+@media (max-width: 520px) { .city-inputs { grid-template-columns: 1fr; gap: 0; } }
 
 /* ---------- Калькулятор: владение и заявка ---------- */
 .own { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
