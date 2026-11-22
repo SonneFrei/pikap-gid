@@ -944,7 +944,7 @@
         status: R.vat.status, note: R.vat.note + " " + R.excise.note, sources: R.vat.sources.concat(R.excise.sources)
       },
       {
-        key: "fee", color: "var(--c-fee)", name: "Таможенный сбор", sub: "по шкале 2026 года", val: fee,
+        key: "fee", color: "var(--c-fee)", name: "Таможенный сбор", sub: "по шкале с 1 января 2026 года", val: fee,
         status: R.customsFee.status, note: "Фиксированная сумма в зависимости от таможенной стоимости.", sources: R.customsFee.sources
       },
       {
