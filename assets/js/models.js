@@ -161,7 +161,7 @@ window.MODELS = [
     msrpCheck: true,
     gvwrKg: [3334, 3402],
     gvwrDefault: 3402,
-    gvwrNote: "В карточках дилеров Ford указано 7 500 lb ≈ 3 402 кг (у обычного Raptor — 7 350 lb). В спецификации Ford цифры нет, поэтому сверяйте по ПТС: запас до 3,5 т — около 100 кг.",
+    gvwrNote: "В карточках дилеров Ford на машины 2026 года было указано 7 500 lb ≈ 3 402 кг (у обычного Raptor — 7 350 lb); карточки снимают после продажи машины. В спецификации Ford цифры нет, поэтому сверяйте по ПТС: запас до 3,5 т — около 100 кг.",
     gvwrCheck: true,
     wide: true,
     widthNote: "Ширина без зеркал — 86,6 дюйма ≈ 2 200 мм (Raptor на 37-дюймовых шинах, по спецификации Ford).",
@@ -171,7 +171,6 @@ window.MODELS = [
     rivals: ["ram-trx"],
     sources: [
       { title: "CarWhere: Ford F-150 Raptor R", url: "https://www.carwhere.com/ford/raptor-r" },
-      { title: "Дилер Ford: Raptor R 2026, GVWR 7 500 lb", url: "https://www.baytownford.com/new/Ford/2026-Ford-F-150-df38abc2ac18162841248f68f19180ae.htm" },
       { title: "Ford: спецификации F-150 2026 (PDF)", url: "https://www.fromtheroad.ford.com/content/dam/fordmediasite/us/en/library/2026/specs/2026_Ford_F150_Specs.pdf" }
     ]
   },
