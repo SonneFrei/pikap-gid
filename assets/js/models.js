@@ -6,12 +6,14 @@
  *   От неё зависят: строка утильсбора, категория прав (B / C), знак 3.4, пропуска.
  * msrpFrom — стартовая цена в США, $, без доставки по США (destination).
  * mpg — расход EPA в смешанном цикле (миль на галлон), grade — тип топлива по EPA
- *   (regular / midgrade / premium / diesel). Источник: fueleconomy.gov, 2026 модельный год
- *   (TRX 2021–2024 — 2024 год; Hurricane HO — данные EPA за 2025 год; Sierra 3.0 дизель — как у Silverado).
- *   5.7 HEMI 2027: в таблице EPA две пары строк — 19/18 (как eTorque 2026) и 17/17 (2WD/4WD); вторую
- *   считаем версией без eTorque (без гибрида расход хуже примерно на 2 mpg). Пометки eTorque в таблице EPA нет.
+ *   (regular / midgrade / premium / diesel). Источник: fueleconomy.gov (REST API), 2027 модельный год,
+ *   версии с полным приводом (4WD) без внедорожных пакетов и грязевых шин; сверено 24.11.2026.
+ *   Исключения: TRX 2021–2024 — 2024 год; моторы «до 2026 модельного года» — 2026 год, 4WD;
+ *   F-150 3.0 EcoBoost и 2.7 TurboMax — EPA на 24.11.2026 данных 2027 года не опубликовал, стоят цифры
+ *   2026 года (F-150 2.7 и 2.7 TurboMax, 4WD). Дизель Sierra 4WD — 21, Silverado 4WD — 22: так у EPA.
+ *   5.7 HEMI 2027, 4WD: у EPA две строки — Mild Hybrid (eTorque) 18 и без гибрида 17.
  * wide / widthNote — широкий кузов: в 40-футовом контейнере (внутри ~2,35 м) места по бокам почти нет.
- * Обновлено: 21.11.2026
+ * Обновлено: 24.11.2026
  */
 window.MODELS = [
   {
@@ -31,7 +33,7 @@ window.MODELS = [
       { id: "ram-1500-36", name: "3.6 V6 Pentastar eTorque", fuel: "petrol", cc: 3604, hp: 305, note: "мягкий гибрид", mpg: 21, grade: "regular" },
       { id: "ram-1500-57", name: "5.7 V8 HEMI eTorque", fuel: "petrol", cc: 5654, hp: 395, note: "мягкий гибрид, 2026 и начало 2027 модельного года", mpg: 18, grade: "midgrade" },
       { id: "ram-1500-57n", name: "5.7 V8 HEMI без eTorque", fuel: "petrol", cc: 5654, hp: 395, note: "с 2027 модельного года: без гибрида и стоп-старта", mpg: 17, grade: "midgrade" },
-      { id: "ram-1500-so", name: "3.0 I6 Hurricane SO", fuel: "petrol", cc: 2998, hp: 420, note: "twin-turbo", mpg: 20, grade: "regular" },
+      { id: "ram-1500-so", name: "3.0 I6 Hurricane SO", fuel: "petrol", cc: 2998, hp: 420, note: "twin-turbo", mpg: 19, grade: "regular" },
       { id: "ram-1500-ho", name: "3.0 I6 Hurricane HO", fuel: "petrol", cc: 2998, hp: 540, note: "RHO, Tungsten", mpg: 17, grade: "premium" }
     ],
     rivals: ["ford-f150", "chevy-silverado", "gmc-sierra"],
@@ -108,16 +110,17 @@ window.MODELS = [
     gvwrNote: "6 220–7 350 lb — все версии в пределах 3,5 т.",
     gvwrCheck: false,
     engines: [
-      { id: "f150-30", name: "3.0 V6 EcoBoost", fuel: "petrol", cc: 2999, hp: 325, note: "базовый с 2027 модельного года; ≈3 000 см³ (у Ford — «3,0 л», точная цифра — в ПТС), больше 2 800 → пошлина 12,5%; расход EPA ещё не опубликован — считаем как у 2.7", mpg: 20, grade: "regular" },
+      { id: "f150-30", name: "3.0 V6 EcoBoost", fuel: "petrol", cc: 2999, hp: 325, note: "базовый с 2027 модельного года; ≈3 000 см³ (у Ford — «3,0 л», точная цифра — в ПТС), больше 2 800 → пошлина 12,5%; расход EPA для 2027 ещё не опубликован — считаем как у 2.7 2026 года", mpg: 20, grade: "regular" },
       { id: "f150-27", name: "2.7 V6 EcoBoost", fuel: "petrol", cc: 2694, hp: 325, note: "до 2026 модельного года; до 2 800 см³ → пошлина 15%", mpg: 20, grade: "regular" },
-      { id: "f150-35", name: "3.5 V6 EcoBoost", fuel: "petrol", cc: 3496, hp: 382, note: "382 л.с. — по сайту Ford для 2027 модельного года (раньше указывали 400)", mpg: 19, grade: "regular" },
-      { id: "f150-50", name: "5.0 V8 Coyote", fuel: "petrol", cc: 4951, hp: 400, note: "", mpg: 19, grade: "regular" },
-      { id: "f150-pb", name: "3.5 V6 PowerBoost", fuel: "petrol", cc: 3496, hp: 420, note: "полный гибрид; считаем как бензин — проверить", mpg: 23, grade: "regular" }
+      { id: "f150-35", name: "3.5 V6 EcoBoost", fuel: "petrol", cc: 3496, hp: 382, note: "382 л.с. — по сайту Ford для 2027 модельного года (раньше указывали 400)", mpg: 18, grade: "regular" },
+      { id: "f150-50", name: "5.0 V8 Coyote", fuel: "petrol", cc: 4951, hp: 400, note: "", mpg: 17, grade: "regular" },
+      { id: "f150-pb", name: "3.5 V6 PowerBoost", fuel: "petrol", cc: 3496, hp: 420, note: "полный гибрид; считаем как бензин — проверить", mpg: 21, grade: "regular" }
     ],
     rivals: ["ram-1500", "chevy-silverado", "gmc-sierra"],
     sources: [
       { title: "Ford: F-150 2027 — цены версий и моторы", url: "https://www.ford.com/trucks/f150/" },
       { title: "Ford: всё о F-150 2027 (новый базовый V6 3.0 вместо 2.7)", url: "https://www.fromtheroad.ford.com/us/en/articles/2026/2027-ford-f-150-specs-features" },
+      { title: "fueleconomy.gov: расход F-150 2027", url: "https://www.fueleconomy.gov/feg/PowerSearch.do?action=noform&path=1&year1=2027&year2=2027&make=Ford&baseModel=F150&srchtyp=ymm&pageno=1&rowLimit=50" },
       { title: "Sneed Ford: масса и GVWR F-150", url: "https://www.sneedford.com/ford-f-150-weight.html" }
     ]
   },
@@ -137,11 +140,12 @@ window.MODELS = [
     wide: true,
     widthNote: "Ширина без зеркал — 79,8–86,6 дюйма (до 2 200 мм на 37-дюймовых шинах), по спецификации Ford.",
     engines: [
-      { id: "raptor-35", name: "3.5 V6 EcoBoost High Output", fuel: "petrol", cc: 3496, hp: 450, note: "", mpg: 16, grade: "regular" }
+      { id: "raptor-35", name: "3.5 V6 EcoBoost High Output", fuel: "petrol", cc: 3496, hp: 450, note: "", mpg: 15, grade: "regular" }
     ],
     rivals: ["ram-1500"],
     sources: [
       { title: "Ford: F-150 Raptor 2027", url: "https://www.ford.com/trucks/f150/models/raptor/" },
+      { title: "fueleconomy.gov: расход Raptor 2027", url: "https://www.fueleconomy.gov/feg/PowerSearch.do?action=noform&path=1&year1=2027&year2=2027&make=Ford&baseModel=F150&srchtyp=ymm&pageno=1&rowLimit=50" },
       { title: "CarWhere: Ford F-150 Raptor", url: "https://www.carwhere.com/ford/raptor" },
       { title: "Ford: спецификации F-150 2026 (PDF)", url: "https://www.fromtheroad.ford.com/content/dam/fordmediasite/us/en/library/2026/specs/2026_Ford_F150_Specs.pdf" }
     ]
